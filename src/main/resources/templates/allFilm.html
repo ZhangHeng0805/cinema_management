@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <title>影片管理</title>
+
+    <link th:include="common::com_css">
+
+</head>
+
+<body class="sticky-header">
+<section>
+    <div th:replace="common :: #com_leftmenu"></div>
+    <div class="main-content">
+        <div th:replace="common :: #com_headermenu"></div>
+        <div class="wrapper">
+            <div class="col-sm-12">
+                <div class="adv-table editable-table">
+                    <section id="no-more-tables">
+                        <div th:replace="common :: #com_alert"></div>
+                        <table class="table table-bordered table-striped table-condensed cf" id="editable-sample">
+                            <thead class="cf">
+                            <tr>
+                                <th style="text-align: center">封面</th>
+                                <th style="text-align: center">片名</th>
+                                <th style="text-align: center">类型</th>
+                                <th style="text-align: center">地区</th>
+                                <th style="text-align: center">导演</th>
+                                <th style="text-align: center">演员</th>
+                                <th style="text-align: center">上映时间</th>
+                                <th style="text-align: center">评分</th>
+                                <th style="text-align: center">状态</th>
+                                <th style="text-align: center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="f:${filmList}" style="text-align: center">
+                                    <td data-title="封面">
+                                        <img th:src="${'/fileload/download/'+f.cover}" style="height: 80px">
+                                    </td>
+                                    <td data-title="片名" style="text-align: center">
+                                        <span th:text="${f.filmName}"></span>
+                                    </td>
+                                    <td data-title="类型">
+                                        <span th:text="${f.filmType}"></span>
+                                    </td>
+                                    <td data-title="地区">
+                                        <span th:text="${f.country}"></span>
+                                    </td>
+                                    <td data-title="导演">
+                                        <span th:text="${f.director}"></span>
+                                    </td>
+                                    <td data-title="演员">
+                                        <span th:text="${f.mainActor}"></span>
+                                    </td>
+                                    <td data-title="上映时间">
+                                        <span th:text="${f.releaseTime}"></span>
+                                    </td>
+                                    <td data-title="评分">
+                                        <span  th:if="${f.movieRatings>=5}" style="color: blue" th:text="${f.movieRatings}"></span>
+                                        <span  th:if="${f.movieRatings<5}" style="color: red" th:text="${f.movieRatings}"></span>
+                                    </td>
+                                    <td data-title="状态">
+                                        <div th:switch="${f.state}">
+                                            <span th:case="0" class="label label-info">即将上映</span>
+                                            <span th:case="1" class="label label-success">正在热映</span>
+                                            <span th:case="2" class="label label-default">已下线</span>
+                                        </div>
+                                    </td>
+                                    <td data-title="操作" style="text-align: center">
+<!--                                        <a class="btn btn-sm btn-search p1" put_url="/ReadArticle/${a.id}/${a.title}" put_id="${a.id}">查看</a>-->
+                                        <a class="btn btn-sm btn-warning s1" th:href="@{'/updateFilmPage?id='+${f.id}}">修改</a>
+                                        <a class="btn btn-sm btn-danger d1" put_url="/deleteFilmById" th:put_id="${f.id}">删除</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <form id="putEmpRorm" method="post">
+                        </form>
+                        <form id="setEmpRorm" method="post">
+                            <input type="hidden" id="s_id" name="id">
+                            <input type="hidden" name="authorId" value="${user.id}">
+                        </form>
+                        <form id="delEmpRorm" method="post">
+                            <input type="hidden" id="d_id" name="id">
+                        </form>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+        <footer class="sticky-footer">
+            2021 &copy; <a href="https://github.com/ZhangHeng0805" target="_blank">星曦向荣</a>
+        </footer>
+    </div>
+</section>
+
+<div th:include="common::#com_js"></div>
+<script>
+    jQuery(document).ready(function() {
+        EditableTable.init();
+    });
+    $(".d1").click(function () {
+        var d=window.confirm("确定删除此影片？");
+        if(d) {
+            $("#d_id").attr("value", $(this).attr("put_id"));
+            $("#delEmpRorm").attr("action", $(this).attr("put_url")).submit();
+            return false;
+        }
+    });
+</script>
+</body>
+</html>

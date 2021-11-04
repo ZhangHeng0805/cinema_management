@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员注册</title>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <link href="/static/css/style-responsive.css" rel="stylesheet">
+</head>
+<body class="login-body">
+
+<div class="container">
+
+    <form class="form-signin" name="regist" th:action="@{/regist_admiPage}" method="post" onsubmit="return submit()">
+        <div class="form-signin-heading text-center">
+            <h1 class="sign-title">管理员注册</h1>
+            <img gsrc="/static/im/login-logo.png" alt=""/>
+        </div>
+        <div class="login-wrap">
+            <div th:replace="common :: #com_alert"></div>
+            <p>在下面输入您的个人详细信息</p>
+            <input type="text" autofocus="" placeholder="请输入姓名" class="form-control" name="name" required>
+            <hr>
+            <p> 在下面输入您的帐户详细信息</p>
+            <input type="text" autofocus="" placeholder="请输入手机号" class="form-control" name="phoneNum" required>
+            <input type="password" placeholder="请输入密码" class="form-control" name="password0" required>
+            <input type="password" placeholder="请再次输入密码" class="form-control" name="password" required>
+
+            <button type="submit" class="btn btn-lg btn-login btn-block">
+                <i class="fa fa-check"></i>
+            </button>
+
+            <div class="registration">
+                已经注册了，
+                <a th:href="@{/login_admi}">去登录</a>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+
+<!-- Placed js at the end of the document so the pages load faster -->
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<script src="/static/js/jquery-1.10.2.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/modernizr.min.js"></script>
+<!--<script src="/js/registration.js"></script>-->
+</body>
+</html>

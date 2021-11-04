@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>影片列表</title>
+    <link th:href="@{/static/css/bootstrap.min.css}">
+    <link th:href="@{/static/css/style.css}">
+    <link th:href="@{/static/css/style-responsive.css}" rel="stylesheet">
+    <script th:src="@{/static/js/bootstrap.min.js}"></script>
+    <script th:src="@{/static/js/jquery-1.10.2.min.js}"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body style="text-align: center">
+<h1>影片列表</h1>
+<div class="main-content">
+    <div class="row" style="text-align: right;margin-right: 25px">
+        <a th:href="@{/login_admi}"><button class="btn btn-success">后台登录</button></a>
+    </div>
+    <div class="row" style="font-size: medium;text-align: center;align-items:center;margin:10px;border-bottom: #1CAF9A solid 1px" th:each="fi:${films}">
+        <div class="col-lg-3" style="text-align:center;height: 400px;display: inline-block">
+            <img th:src="${'/fileload/download/'+fi.cover}"style="width: 250px;object-fit: contain">
+        </div>
+        <blockquote class="col-lg-9" style="text-align: left;height: 400px">
+                <h3>《<span th:text="${fi.filmName}"></span>》</h3>
+                <p>导演：<span th:text="${fi.director}"></span></p>
+                <p>主要演员：<span th:text="${fi.mainActor}"></span></p>
+                <p>类型：<span th:text="${fi.filmType}"></span></p>
+                <p>地区：<span th:text="${fi.country}"></span></p>
+                <p>评分：<span class="label label-info" th:text="${fi.movieRatings}"></span></p>
+                <p>上映时间：<span th:text="${fi.releaseTime}"></span></p>
+                <p>简介：<span th:text="${fi.filmIntroduced}"></span></p>
+                <div th:switch="${fi.state}">
+                    <button th:case="0" class="btn btn-info" disabled>即将上线</button>
+                    <button th:case="1" class="btn btn-success">去购票</button>
+                    <button th:case="2" class="btn btn-default" disabled>已售罄</button>
+                </div>
+        </blockquote>
+
+<!--        <hr width="100%"style="border: #1CAF9A solid 0.6px;">-->
+</div>
+</div>
+
+
+</body>
+</html>

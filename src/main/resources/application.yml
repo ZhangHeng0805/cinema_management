@@ -1,0 +1,34 @@
+server:
+  error:
+#    错误异常包含
+    include-exception: true
+  tomcat:
+#    表单提交大小
+    max-http-form-post-size: 100MB
+#    连接超时
+    connection-timeout: 180000
+  undertow:
+    url-charset: UTF-8
+spring:
+  servlet:
+    multipart:
+#      最大文件大小
+      max-file-size: 100MB
+#      最大请求大小
+      max-request-size: 100MB
+  resources:
+#    static-locations:
+#      - classpath:/resources/
+#      - classpath:/statice/
+  mvc:
+    static-path-pattern: /static/**
+  #    静态文件路径
+  thymeleaf:
+#    模板缓存
+    cache: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+#     控制台显示SQL
+    show-sql: false
+    database: mysql

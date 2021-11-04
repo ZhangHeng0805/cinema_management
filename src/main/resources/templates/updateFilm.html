@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>影片更新</title>
+    <link th:include="common::com_css">
+    <script th:src="@{/static/js/myJs/input.js}"></script>
+
+</head>
+
+<body class="sticky-header">
+<section>
+    <div th:replace="common :: #com_leftmenu"></div>
+    <div class="main-content">
+        <div th:replace="common :: #com_headermenu"></div>
+        <div class="wrapper">
+            <div th:replace="common :: #com_alert"></div>
+            <form th:if="${updateFilm!=null}" class="form-horizontal" th:action="@{/updateFilm}" role="form" name="addFilmFrom" method="post" enctype="multipart/form-data" onsubmit="return flag()">
+                <!--电影名称-->
+                <div class="form-group">
+                    <label for="filmName" class="col-lg-1 col-sm-1 control-label">电影名称</label>
+                    <div class="col-lg-11">
+                        <input type="hidden" name="id" th:value="${updateFilm.id}">
+                        <input type="text"name="filmName" th:value="${updateFilm.filmName}" class="form-control" id="filmName" oninput="titleInput('filmName','t_filmName',15)" placeholder="电影名称" required>
+                        <p id="t_filmName" class="help-block">请输入电影的名陈（字数限制15字）</p>
+                    </div>
+                </div>
+                <!--电影封面-->
+                <div class="form-group">
+                    <label for="cover" class="col-lg-1 col-sm-1 control-label">电影封面</label>
+                    <div class="col-lg-11">
+                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                            <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+<!--                                <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />-->
+                                <img th:src="@{'/fileload/download/'+${updateFilm.cover}}" alt="" />
+                            </div>
+                            <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                            <div>
+                                <span class="label label-danger ">注意!</span>
+                                <span>请选择电影的封面(大小2Mb以内)</span>
+                                <br>
+                                <span class="btn btn-default btn-file">
+                                   <span class="fileupload-new"><i class="fa fa-paper-clip"></i> 修改图片</span>
+                                   <span class="fileupload-exists"><i class="fa fa-undo"></i> 更改</span>
+                                   <input id="cover" type="file" class="default" name="image" />
+                                </span>
+                                <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--电影类型-->
+                <div class="form-group">
+                    <label for="filmType" class="col-lg-1 col-sm-1 control-label">电影类型</label>
+                    <div class="col-lg-11">
+                        <input type="text"name="filmType"th:value="${updateFilm.filmType}" class="form-control" id="filmType" oninput="titleInput('filmType','t_filmType',25)" placeholder="电影类型(多个类型逗号隔开)" required>
+                        <p id="t_filmType" class="help-block">请输入电影的类型[多个类型逗号隔开]（字数限制25字）</p>
+                    </div>
+                </div>
+                <!--电影国家地区-->
+                <div class="form-group">
+                    <label for="country" class="col-lg-1 col-sm-1 control-label">国家地区</label>
+                    <div class="col-lg-11">
+                        <input type="text"name="country" th:value="${updateFilm.country}" class="form-control" id="country" oninput="titleInput('country','t_country',15)" placeholder="电影的国家地区" required>
+                        <p id="t_country" class="help-block">请输入电影的国家地区（字数限制15字）</p>
+                    </div>
+                </div>
+                <!--导演-->
+                <div class="form-group">
+                    <label for="director" class="col-lg-1 col-sm-1 control-label">导演</label>
+                    <div class="col-lg-11">
+                        <input type="text"name="director" th:value="${updateFilm.director}" class="form-control" id="director" oninput="titleInput('director','t_director',15)" placeholder="电影的导演(多个之间用逗号隔开)" required>
+                        <p id="t_director" class="help-block">请输入电影的导演[多个之间用逗号隔开]（字数限制15字）</p>
+                    </div>
+                </div>
+                <!--主要演员-->
+                <div class="form-group">
+                    <label for="mainActor" class="col-lg-1 col-sm-1 control-label">主要演员</label>
+                    <div class="col-lg-11">
+                        <input type="text"name="mainActor" th:value="${updateFilm.mainActor}" class="form-control" id="mainActor" oninput="titleInput('mainActor','t_mainActor',35)" placeholder="电影的主要演员(多个之间用逗号隔开)" required>
+                        <p id="t_mainActor" class="help-block">请输入电影的主要演员[多个之间用逗号隔开]（字数限制35字）</p>
+                    </div>
+                </div>
+                <!--上映时间-->
+                <div class="form-group">
+                    <label for="releaseTime" class="col-lg-1 col-sm-1 control-label">上映时间</label>
+                    <div class="col-lg-11">
+                        <input type="text"name="releaseTime" th:value="${updateFilm.releaseTime}" class="form-control" id="releaseTime" oninput="titleInput('releaseTime','t_releaseTime',10)" placeholder="电影的上映时间(xxxx-xx-xx)" required>
+                        <p id="t_releaseTime" class="help-block">请输入电影的上映时间[时间格式：xxxx-xx-xx]（字数限制10字）</p>
+                    </div>
+                </div>
+                <!--电影评分-->
+                <div class="form-group">
+                    <label for="movieRatings" class="col-lg-1 col-sm-1 control-label">电影评分</label>
+                    <div class="col-lg-11">
+                        <input type="number"name="movieRatings" th:value="${updateFilm.movieRatings}" class="form-control" id="movieRatings"step="0.1" min="0" max="10"  oninput="titleInput('movieRatings','t_movieRatings',3)" placeholder="电影的评分（格式:6.6）" required>
+                        <p id="t_movieRatings" class="help-block">请输入电影的电影评分[10以内的小数 格式:6.6]（字数限制3字）</p>
+                    </div>
+                </div>
+                <!--电影简介-->
+                <div class="form-group">
+                    <label for="filmIntroduced" class="col-lg-1 col-sm-1 control-label">电影简介</label>
+                    <div class="col-lg-11">
+                        <textarea type="text"name="filmIntroduced" th:text="${updateFilm.filmIntroduced}" class="form-control" id="filmIntroduced" rows="3" oninput="titleInput('filmIntroduced','t_filmIntroduced',200)" placeholder="电影的简介" required></textarea>
+                        <p id="t_filmIntroduced" class="help-block">请输入电影的电影简介（字数限制200字）</p>
+                    </div>
+                </div>
+                <!--电影状态-->
+                <div class="form-group">
+                    <label for="state" class="col-lg-1 col-sm-1 control-label">电影状态</label>
+                    <div class="col-lg-11">
+                        <input type="hidden" th:value="${updateFilm.state}" id="f_state">
+                        <select class="form-control" id="state" name="state" required>
+                            <option value="0">即将上线</option>
+                            <option value="1">正在热映</option>
+                            <option value="2">已下线</option>
+                        </select>
+                        <p id="t_state" class="help-block">请选择电影的状态[只有'正在热映'的电影可以去购票]</p>
+                    </div>
+                </div>
+                <!--表单提交按钮-->
+                <div class="form-group">
+                    <div class="col-lg-offset-1 col-lg-3">
+                        <button type="submit" class="btn btn-success btn-lg btn-block">修改影片</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer class="sticky-footer">
+            2021 &copy; <a href="https://github.com/ZhangHeng0805" target="_blank">星曦向荣</a>
+        </footer>
+    </div>
+</section>
+
+<div th:include="common::#com_js"></div>
+<script>
+    function set_select_checked(selectId, checkValue){
+        var select = document.getElementById(selectId);
+        for (var i = 0; i < select.options.length; i++){
+            if (select.options[i].value == checkValue){
+                select.options[i].selected = true;
+                break;
+            }
+        }
+    }
+    var val=$("#f_state").val()
+    set_select_checked('state',val)
+</script>
+</body>
+</html>
