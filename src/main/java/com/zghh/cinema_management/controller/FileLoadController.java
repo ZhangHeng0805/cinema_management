@@ -28,7 +28,7 @@ public class FileLoadController {
     private static String baseDir = "files/";
     Logger log = LoggerFactory.getLogger(FileLoadController.class);
 
-    //保存图片，并返回保存路径
+    //保存图片，并返回保存路径，(如果返回为null则保存失败)
     public String saveImage(MultipartFile img,String imgName){
         String path=null;
         if (!img.isEmpty()){
@@ -64,7 +64,7 @@ public class FileLoadController {
             return path;
         }
     }
-    //删除旧图
+    //删除旧图片
     public void deleteImg(String path){
         String p="files/";
         File file = new File(p+path);
@@ -79,6 +79,7 @@ public class FileLoadController {
             log.error("旧图片不存在："+path);
         }
     }
+    //文件下载请求
     @GetMapping("download/{type}/{name:.+}")
     public void show(@PathVariable("name") String name,
                        @PathVariable("type") String type, HttpServletRequest request,
