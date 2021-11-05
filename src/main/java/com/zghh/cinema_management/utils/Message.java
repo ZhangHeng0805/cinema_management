@@ -1,5 +1,6 @@
 package com.zghh.cinema_management.utils;
 
+
 public class Message {
     private String time;//时间戳
     private int code;//状态码(200:成功 100:数据为Null 500:错误）

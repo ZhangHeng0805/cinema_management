@@ -15,47 +15,39 @@
         <div th:replace="common :: #com_headermenu"></div>
         <div class="wrapper">
             <div th:replace="common :: #com_alert"></div>
-            <form class="form-horizontal" th:action="@{/addFilmPage}" role="form" name="addFilmFrom" method="post" enctype="multipart/form-data" onsubmit="return flag()">
+            <form class="form-horizontal" th:action="@{/addScreens}" role="form" name="addScreensFrom" method="post" enctype="multipart/form-data" onsubmit="return flag()">
                 <!--影厅名称-->
                 <div class="form-group">
-                    <label for="filmName" class="col-lg-1 col-sm-1 control-label">影厅名称</label>
+                    <label for="screensName" class="col-lg-1 col-sm-1 control-label">影厅名称</label>
                     <div class="col-lg-11">
-                        <input type="text"name="filmName" class="form-control" id="filmName" oninput="titleInput('filmName','t_filmName',20)" placeholder="影厅名称" required>
-                        <p id="t_filmName" class="help-block">请输入影厅的名称（字数限制20字）</p>
+                        <input type="text"name="screensName" class="form-control" id="screensName" oninput="titleInput('screensName','t_screensName',20)" placeholder="影厅名称" required>
+                        <p id="t_screensName" class="help-block">请输入影厅的名称（字数限制20字）</p>
                     </div>
                 </div>
 
 
                 <!--影厅类型-->
                 <div class="form-group">
-                    <label for="filmType" class="col-lg-1 col-sm-1 control-label">影厅类型</label>
+                    <label for="type" class="col-lg-1 col-sm-1 control-label">影厅类型</label>
                     <div class="col-lg-11">
-                        <input type="text"name="filmType" class="form-control" id="filmType" oninput="titleInput('filmType','t_filmType',25)" placeholder="影厅类型" required>
-                        <p id="t_filmType" class="help-block">请输入影厅的类型</p>
+                        <input type="text"name="type" class="form-control" id="type" oninput="titleInput('type','t_screensType',25)" placeholder="影厅类型" required>
+                        <p id="t_screensType" class="help-block">请输入影厅的类型</p>
                     </div>
                 </div>
                 <!--座位数-->
                 <div class="form-group">
-                    <label for="country" class="col-lg-1 col-sm-1 control-label">座位数</label>
+                    <label for="seatingNum" class="col-lg-1 col-sm-1 control-label">座位数</label>
                     <div class="col-lg-11">
-                        <input type="text"name="country" class="form-control" id="country" oninput="titleInput('country','t_country',10)" placeholder="座位数" required>
-                        <p id="t_country" class="help-block">请输入座位数（字数限制10字）</p>
+                        <input type="text"name="seatingNum" class="form-control" id="seatingNum" oninput="titleInput('seatingNum','t_seatingNum',10)" placeholder="座位数" required>
+                        <p id="t_seatingNum" class="help-block">请输入座位数（字数限制10字）</p>
                     </div>
                 </div>
-                <!--&lt;!&ndash;座位状态&ndash;&gt;-->
-                <!--<div class="form-group">-->
-                    <!--<label for="director" class="col-lg-1 col-sm-1 control-label">座位状态</label>-->
-                    <!--<div class="col-lg-11">-->
-                        <!--<input type="text"name="director" class="form-control" id="director" oninput="titleInput('director','t_director',25)" placeholder="座位状态" required>-->
-                        <!--<p id="t_director" class="help-block">请输入电影的导演[多个之间用逗号隔开]（字数限制25字）</p>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--影厅状态-->
+
                 <div class="form-group">
-                    <label for="mainActor" class="col-lg-1 col-sm-1 control-label">影厅状态</label>
+                    <label for="state" class="col-lg-1 col-sm-1 control-label">影厅状态</label>
                     <div class="col-lg-11">
-                        <input type="text"name="mainActor" class="form-control" id="mainActor" oninput="titleInput('mainActor','t_mainActor',45)" placeholder="影厅状态" required>
-                        <p id="t_mainActor" class="help-block">请输入影厅状态</p>
+                        <input type="text"name="state" class="form-control" id="state" oninput="titleInput('state','t_state',45)" placeholder="影厅状态" required>
+                        <p id="t_state" class="help-block">请输入影厅状态</p>
                     </div>
                 </div>
 

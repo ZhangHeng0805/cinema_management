@@ -1,19 +1,16 @@
 package com.zghh.cinema_management.controller;
 
-import com.zghh.cinema_management.bean.Administrator;
 import com.zghh.cinema_management.bean.Film;
 import com.zghh.cinema_management.repository.FilmRepository;
 import com.zghh.cinema_management.utils.Message;
 import com.zghh.cinema_management.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -101,6 +98,7 @@ public class FilmController {
         model.addAttribute("active","2");
         return "addFilm";
     }
+
     //跳转至全部影片管理界面
     @RequestMapping("allFilmPage")
     private String allFilm(Model model, HttpServletRequest request){
