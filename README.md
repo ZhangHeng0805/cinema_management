@@ -17,7 +17,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50535
 File Encoding         : 65001
 
-Date: 2021-11-04 16:41:56
+Date: 2021-11-05 23:05:20
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -52,7 +52,8 @@ CREATE TABLE `t_film` (
   `release_time` varchar(20) DEFAULT NULL COMMENT '上映时间',
   `state` int(1) DEFAULT '0' COMMENT '影片状态（0-即将上映 1-上映中 2-下线）',
   `film_introduced` varchar(1000) DEFAULT NULL COMMENT '电影简介',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `film_name` (`film_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -101,16 +102,22 @@ DROP TABLE IF EXISTS `t_row_piece`;
 CREATE TABLE `t_row_piece` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '排片id',
   `film_id` int(11) DEFAULT NULL COMMENT '电影id',
+  `film_name` varchar(255) DEFAULT NULL,
   `screens_id` int(11) DEFAULT NULL COMMENT '影厅id',
+  `screens_name` varchar(255) DEFAULT NULL,
   `playing_time` varchar(20) DEFAULT NULL COMMENT '播放时间',
   `fare` double(11,2) DEFAULT NULL COMMENT '票价',
   `sit_state` text COMMENT '座位状态',
   PRIMARY KEY (`id`),
   KEY `t_rowpiece_ibfk_1` (`film_id`),
   KEY `t_rowpiece_ibfk_2` (`screens_id`),
+  KEY `film_name` (`film_name`),
+  KEY `screens_name` (`screens_name`),
+  CONSTRAINT `t_row_piece_ibfk_4` FOREIGN KEY (`screens_name`) REFERENCES `t_screens` (`screens_name`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `t_row_piece_ibfk_1` FOREIGN KEY (`film_id`) REFERENCES `t_film` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `t_row_piece_ibfk_2` FOREIGN KEY (`screens_id`) REFERENCES `t_screens` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  CONSTRAINT `t_row_piece_ibfk_2` FOREIGN KEY (`screens_id`) REFERENCES `t_screens` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `t_row_piece_ibfk_3` FOREIGN KEY (`film_name`) REFERENCES `t_film` (`film_name`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for t_screens
@@ -123,8 +130,9 @@ CREATE TABLE `t_screens` (
   `seating_num` int(11) DEFAULT NULL COMMENT '座位数',
   `seating_info` text COMMENT '座位状态',
   `state` int(1) DEFAULT '0' COMMENT '影厅状态（0-未启用 1-启用）',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `screens_name` (`screens_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 ```
 
