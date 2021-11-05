@@ -126,6 +126,7 @@ public class AdmiController {
             return "login_admi";
         }
     }
+
     //管理员注册页面
     @RequestMapping("regist_admiPage")
     private String regist(@Nullable Administrator administrator,Model model){

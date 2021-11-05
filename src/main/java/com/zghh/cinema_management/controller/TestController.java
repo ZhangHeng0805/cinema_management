@@ -42,14 +42,14 @@ public class TestController {
 //        Administrator save = administratorRepository.saveAndFlush(administrator);//管理员添加
 //        Film save = filmRepository.saveAndFlush(film);//电影添加
 //        Members saveAndFlush = membersRepository.saveAndFlush(members);//会员添加
-//        Screens saveAndFlush = screensRepository.saveAndFlush(screens);//影厅添加
+        Screens saveAndFlush = screensRepository.saveAndFlush(screens);//影厅添加
 //        RowPiece saveAndFlush = rowPieceRepository.saveAndFlush(rowPiece);//排片添加
 //        Order saveAndFlush = orderRepository.saveAndFlush(order);//订单添加
 
 //        System.out.println(saveAndFlush);
-        List<Film> filmList = filmRepository.findAll();
+//        List<Film> filmList = filmRepository.findAll();
 //        System.out.println(save);
-        model.addAttribute("films",filmList);
+//        model.addAttribute("films",filmList);
         return "index";
     }
     //编造订单数据
@@ -86,7 +86,14 @@ public class TestController {
         String s = gson.toJson(SeatingInfoList);
         rowPiece.setSitState(s);
         return rowPiece;
+
+
     }
+
+
+
+
+
     //编造影厅信息
     private Screens screens(){
         Screens screens = new Screens();
