@@ -202,7 +202,12 @@ public class FilmController {
             Optional<Film> byId = filmRepository.findById(id);
             //判断该id的影片是否存在
             if (byId.isPresent()){
+                //数据库删除影片信息
                 filmRepository.deleteById(id);
+                //将影片的封面删除
+                FileLoadController fileLoadController = new FileLoadController();
+                fileLoadController.deleteImg(byId.get().getCover());
+
                 msg.setTime(TimeUtil.time(new Date()));
                 msg.setCode(200);
                 msg.setTitle("删除电影成功");
