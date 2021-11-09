@@ -22,6 +22,18 @@ public class SeatingInfoUtil {
         }}
         return list;
     }
+    //检查所选位置是否有座
+    public static boolean checkSit(String SitJson,List<Integer> sitList){
+        boolean b=true;
+        List<Character> characters = jsonToList(SitJson);
+        for (int i:sitList){
+            if (characters.get(i).equals('f')){
+                b=false;
+                break;
+            }
+        }
+        return b;
+    }
     //修改座位信息(sitJson:初始的座位情况的JSON；subSit:修改的座位位置；flag:修改的状态[t/f])
     public static String updateSit(String sitJson,List<Integer> subSit,char flag){
         String s=null;

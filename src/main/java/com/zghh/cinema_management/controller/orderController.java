@@ -112,20 +112,28 @@ public class orderController {
                                 order.setOrderTime(TimeUtil.time(new Date()));
                                 //设置订单状态
                                 order.setOrderState(0);
-                                //修改座位情况
-                                String s = SeatingInfoUtil.updateSit(byId.get().getSitState(), list, 'f');
-                                //将新的座位情况设置到排片中
-                                if (s!=null) {
-                                    byId.get().setSitState(s);
-                                    //修改排片中的座位情况
-                                    rowPieceRepository.saveAndFlush(byId.get());
-                                    //保存订单
-                                    Order save = orderRepository.save(order);
-                                    msg.setCode(200);
-                                    msg.setMessage("订单号：" + save.getOrderNum() + " ；订单状态：未完成,待支付。");
+                                //检查所选座位是否有人
+                                boolean b = SeatingInfoUtil.checkSit(byId.get().getSitState(), list);
+                                if (b) {
+                                    //修改座位情况
+                                    String s = SeatingInfoUtil.updateSit(byId.get().getSitState(), list, 'f');
+                                    //判断修改座位情况是否成功
+                                    if (s != null) {
+                                        //将新的座位情况设置到排片中
+                                        byId.get().setSitState(s);
+                                        //修改排片中的座位情况
+                                        rowPieceRepository.saveAndFlush(byId.get());
+                                        //保存订单
+                                        Order save = orderRepository.save(order);
+                                        msg.setCode(200);
+                                        msg.setMessage("订单号：" + save.getOrderNum() + " ；总金额："+save.getOrderPrice()+"元；订单状态：未完成,待支付。");
+                                    } else {
+                                        msg.setCode(500);
+                                        msg.setMessage("错误，座位信息情况修改失败");
+                                    }
                                 }else {
-                                    msg.setCode(500);
-                                    msg.setMessage("错误，座位信息情况修改失败");
+                                   msg.setCode(500);
+                                   msg.setMessage("所选座位已有人，请勿重复提交");
                                 }
                             }else {
                                 msg.setCode(500);
