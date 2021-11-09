@@ -10,10 +10,10 @@
 
 <div class="container">
 
-    <form class="form-signin" name="regist" th:action="@{/regist_admiPage}" method="post" onsubmit="return submit()">
+    <form class="form-signin" name="regist" th:action="@{/regist_admiPage}" method="post" onsubmit="return submit();">
         <div class="form-signin-heading text-center">
             <h1 class="sign-title">管理员注册</h1>
-            <img gsrc="/static/im/login-logo.png" alt=""/>
+            <img src="/static/images/login-logo.png" alt=""/>
         </div>
         <div class="login-wrap">
             <div th:replace="common :: #com_alert"></div>
@@ -22,8 +22,23 @@
             <hr>
             <p> 在下面输入您的帐户详细信息</p>
             <input type="text" autofocus="" placeholder="请输入手机号" class="form-control" name="phoneNum" required>
-            <input type="password" placeholder="请输入密码" class="form-control" name="password0" required>
-            <input type="password" placeholder="请再次输入密码" class="form-control" name="password" required>
+            <input type="password" placeholder="请输入密码" id="password0" class="form-control" name="password0" required>
+            <input type="password" placeholder="请再次输入密码" id="password" class="form-control" name="password" required>
+            <!--验证码-->
+            <div class="row"style="text-align: center">
+                <div class="col-lg-6">
+                    <img th:src="@{/static/images/QRcode.jpg}" style="height: 150px">
+                </div>
+                <div class="col-lg-6"style="padding-top: 15px">
+                    <div class="row">
+                        <label>扫码关注微信公众号,回复：<span class="text-danger" th:text="${codeId}"></span>;获取验证码</label>
+                    </div>
+                    <div class="row" style="padding-top: 10px">
+                        <input type="hidden" name="codeId" th:value="${codeId}">
+                        <input type="text" placeholder="输入验证码" class="form-control" name="code" required>
+                    </div>
+                </div>
+            </div>
 
             <button type="submit" class="btn btn-lg btn-login btn-block">
                 <i class="fa fa-check"></i>
@@ -48,6 +63,7 @@
 <script src="/static/js/jquery-1.10.2.min.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="/static/js/modernizr.min.js"></script>
+<script src="/static/js/myJs/form_submit.js"></script>
 <!--<script src="/js/registration.js"></script>-->
 </body>
 </html>

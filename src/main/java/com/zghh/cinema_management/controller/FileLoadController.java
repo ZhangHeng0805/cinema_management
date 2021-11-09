@@ -29,7 +29,7 @@ public class FileLoadController {
     Logger log = LoggerFactory.getLogger(FileLoadController.class);
 
     //保存图片，并返回保存路径，(如果返回为null则保存失败)
-    public String saveImage(MultipartFile img,String imgName){
+    public String saveImage(MultipartFile img,String imgName,String type){
         String path=null;
         if (!img.isEmpty()){
             if (img.getSize()<2080000) {
@@ -39,7 +39,7 @@ public class FileLoadController {
                 filename = filename.replace(" ", "");
                 //判断文件是否为图片
                 if (FiletypeUtil.getFileType(filename).equals("image")) {
-                    String name = "FilmImage/星曦向荣影视网"
+                    String name = type+"/星曦向荣影视网"
                             + UUID.randomUUID().toString().substring(0, 5)
                             + "_" + imgName+filename.substring(filename.lastIndexOf("."));
                     File outFile = new File(baseDir + name);
@@ -64,6 +64,7 @@ public class FileLoadController {
             return path;
         }
     }
+
     //删除旧图片
     public void deleteImg(String path){
         String p="files/";
@@ -108,7 +109,7 @@ public class FileLoadController {
                 input.close();
             }catch (Exception e){
                 log.error(e.getMessage());
-                response.sendError(500,e.getMessage());
+//                response.sendError(500,e.getMessage());
             }
 
         }

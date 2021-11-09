@@ -1,7 +1,9 @@
 package com.zghh.cinema_management.controller;
 
 import com.zghh.cinema_management.bean.Film;
+import com.zghh.cinema_management.bean.RowPiece;
 import com.zghh.cinema_management.repository.FilmRepository;
+import com.zghh.cinema_management.repository.RowPieceRepository;
 import com.zghh.cinema_management.utils.Message;
 import com.zghh.cinema_management.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ import java.util.Optional;
 public class FilmController {
     @Autowired
     private FilmRepository filmRepository;
+    @Autowired
+    private RowPieceRepository rowPieceRepository;
     /*跳转至影片列表页面*/
     @RequestMapping("/")
     private String toFilmListPage(Model model){
@@ -49,7 +53,7 @@ public class FilmController {
                         msg.setMessage("该影片已存在，请不要重复添加！");
                     } else {
                         FileLoadController fileLoadController = new FileLoadController();
-                        String s = fileLoadController.saveImage(image, film.getFilmName());
+                        String s = fileLoadController.saveImage(image, film.getFilmName(),"FilmImage");
                         if (s!=null) {
                             //设置封面
                             film.setCover(s);
@@ -67,7 +71,7 @@ public class FilmController {
                     }
                 } else {
                     FileLoadController fileLoadController = new FileLoadController();
-                    String s = fileLoadController.saveImage(image, film.getFilmName());
+                    String s = fileLoadController.saveImage(image, film.getFilmName(),"FilmImage");
                     if (s!=null) {
                         film.setCover(s);
                         Film save = filmRepository.save(film);
@@ -151,7 +155,7 @@ public class FilmController {
                 if (!image.isEmpty()) {
                     FileLoadController fileLoadController = new FileLoadController();
                     //保存新的图片
-                    String s = fileLoadController.saveImage(image, film.getFilmName());
+                    String s = fileLoadController.saveImage(image, film.getFilmName(),"FilmImage");
                     if (s!=null){
                         //将新的图片路径存入新的电影信息中
                         film.setCover(s);
@@ -193,6 +197,8 @@ public class FilmController {
         model.addAttribute("msg",msg);
         return "updateFilm";
     }
+
+    //删除影片
     @PostMapping("deleteFilmById")
     private String deleteFilmById(@Nullable Integer id,Model model){
         Message msg = new Message();
@@ -200,16 +206,23 @@ public class FilmController {
             Optional<Film> byId = filmRepository.findById(id);
             //判断该id的影片是否存在
             if (byId.isPresent()){
-                //数据库删除影片信息
-                filmRepository.deleteById(id);
-                //将影片的封面删除
-                FileLoadController fileLoadController = new FileLoadController();
-                fileLoadController.deleteImg(byId.get().getCover());
+                List<RowPiece> rowPieceByFilmId = rowPieceRepository.findRowPieceByFilmId(id);
+                //检查该影片是否有排片
+                if (rowPieceByFilmId.isEmpty()) {//没有排片，可以删除
+                    //数据库删除影片信息
+                    filmRepository.deleteById(id);
+                    //将影片的封面删除
+                    FileLoadController fileLoadController = new FileLoadController();
+                    fileLoadController.deleteImg(byId.get().getCover());
 
-                msg.setTime(TimeUtil.time(new Date()));
-                msg.setCode(200);
-                msg.setTitle("删除电影成功");
-                msg.setMessage("成功，删除影片《"+byId.get().getFilmName()+"》成功!");
+                    msg.setTime(TimeUtil.time(new Date()));
+                    msg.setCode(200);
+                    msg.setTitle("删除电影成功");
+                    msg.setMessage("成功，删除影片《" + byId.get().getFilmName() + "》成功!");
+                }else {
+                    msg.setCode(500);
+                    msg.setMessage("该影片已排片。无法删除！");
+                }
             }else {
                 msg.setTime(TimeUtil.time(new Date()));
                 msg.setCode(500);

@@ -3,7 +3,9 @@ package com.zghh.cinema_management.controller;
 import com.google.gson.Gson;
 import com.zghh.cinema_management.bean.*;
 import com.zghh.cinema_management.repository.*;
+import com.zghh.cinema_management.utils.Message;
 import com.zghh.cinema_management.utils.TimeUtil;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 @Controller
 public class TestController {
@@ -27,6 +30,8 @@ public class TestController {
     private RowPieceRepository rowPieceRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private CodeRepository codeRepository;
 
 
 //    @ResponseBody
@@ -42,15 +47,17 @@ public class TestController {
 //        Administrator save = administratorRepository.saveAndFlush(administrator);//管理员添加
 //        Film save = filmRepository.saveAndFlush(film);//电影添加
 //        Members saveAndFlush = membersRepository.saveAndFlush(members);//会员添加
-        Screens saveAndFlush = screensRepository.saveAndFlush(screens);//影厅添加
+//        Screens saveAndFlush = screensRepository.saveAndFlush(screens);//影厅添加
 //        RowPiece saveAndFlush = rowPieceRepository.saveAndFlush(rowPiece);//排片添加
 //        Order saveAndFlush = orderRepository.saveAndFlush(order);//订单添加
 
 //        System.out.println(saveAndFlush);
-//        List<Film> filmList = filmRepository.findAll();
+//        List<Film> filmList = filmRepository.findAll();//查询所有的电影电影信息
+        List<Screens> all = screensRepository.findAll();//查询所有的影厅数据
 //        System.out.println(save);
 //        model.addAttribute("films",filmList);
-        return "index";
+        model.addAttribute("screens",all.get(0));
+        return "test";
     }
     //编造订单数据
     private Order order(){
@@ -63,7 +70,7 @@ public class TestController {
         order.setOrderState(1);
         order.setOrderTime(TimeUtil.time(new Date()));
         order.setRowpieceId(1);
-        order.setSitNum(12);
+        order.setSitNum("12");
         return order;
     }
 
@@ -178,6 +185,19 @@ public class TestController {
         administrator.setPassword("10120812");
         administrator.setState(1);
         return administrator;
+    }
+    @Test
+    public void test(){
+        String t1="2018-03-01 12:00";
+        String t2="2018-03-12 12:00";
+        int i1 = TimeUtil.daysDifference(t1, t2);
+        int i2 = TimeUtil.hoursDifference(t1, t2);
+        int i3 = TimeUtil.minutesDifference(t1, t2);
+        System.out.println("天数差:"+i1+";小时差:"+i2+";分钟差:"+i3);
+    }
+    @Test
+    public void test1(){
+
     }
 
 }

@@ -13,7 +13,11 @@ public class RowPiece {
     @Column
     private Integer filmId;//电影id
     @Column
+    private String filmName;//电影名称
+    @Column
     private Integer screensId;//影厅id
+    @Column
+    private String screensName;//影厅名称
     @Column
     private String playingTime;//播放时间
     @Column
@@ -36,6 +40,22 @@ public class RowPiece {
 
     public void setFilmId(Integer filmId) {
         this.filmId = filmId;
+    }
+
+    public String getFilmName() {
+        return filmName;
+    }
+
+    public void setFilmName(String filmName) {
+        this.filmName = filmName;
+    }
+
+    public String getScreensName() {
+        return screensName;
+    }
+
+    public void setScreensName(String screensName) {
+        this.screensName = screensName;
     }
 
     public Integer getScreensId() {

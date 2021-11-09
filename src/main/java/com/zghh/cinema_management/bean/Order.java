@@ -17,7 +17,7 @@ public class Order {
     @Column
     private Integer rowpieceId;//排片id
     @Column
-    private Integer sitNum;//座位号
+    private String sitNum;//座位号(多个之间逗号隔开)
     @Column
     private Integer orderState;//订单状态（0-未完成 1-已完成 2-订单失败）
     @Column
@@ -57,11 +57,11 @@ public class Order {
         this.rowpieceId = rowpieceId;
     }
 
-    public Integer getSitNum() {
+    public String getSitNum() {
         return sitNum;
     }
 
-    public void setSitNum(Integer sitNum) {
+    public void setSitNum(String sitNum) {
         this.sitNum = sitNum;
     }
 
@@ -87,5 +87,19 @@ public class Order {
 
     public void setOrderPrice(Double orderPrice) {
         this.orderPrice = orderPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderNum='" + orderNum + '\'' +
+                ", accountId=" + accountId +
+                ", rowpieceId=" + rowpieceId +
+                ", sitNum='" + sitNum + '\'' +
+                ", orderState=" + orderState +
+                ", orderTime='" + orderTime + '\'' +
+                ", orderPrice=" + orderPrice +
+                '}';
     }
 }

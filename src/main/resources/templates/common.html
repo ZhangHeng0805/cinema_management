@@ -33,38 +33,59 @@
     <div class="left-side-inner">
         <!--左菜单-->
         <ul class="nav nav-pills nav-stacked custom-nav">
-<!--            <li th:class="${active}=='1' or ${active}=='2'?'menu-list nav-active':'menu-list'">-->
-<!--            <li class="menu-list">-->
-<!--                <a><i class="fa fa-laptop"></i> <span>电影管理</span></a>-->
-<!--                <ul class="sub-menu-list">-->
-<!--                    <li th:class="${active}=='1'?'active':''"><a th:href="@{/allFilmPage}"> 电影列表</a></li>-->
-<!--                    <li th:class="${active}=='2'?'active':''"><a th:href="@{/addFilmPage}"> 添加电影</a></li>-->
-<!--                </ul>-->
-<!--            </li>-->
-            <li><a th:href="@{/}" target="_blank"><i class="fa fa-list-ol"></i><span>电影首页</span></a></li>
+            <li><a th:href="@{/}" target="_blank"><i class="fa fa-home"></i><span>电影首页</span></a></li>
+            <hr>
             <li th:class="${active}=='1'?'active':''"><a th:href="@{/allFilmPage}"><i class="fa fa-bars"></i><span>电影列表</span></a></li>
             <li th:class="${active}=='2'?'active':''"><a th:href="@{/addFilmPage}"><i class="fa fa-plus"></i> <span>添加电影</span> </a></li>
+            <hr>
             <li th:class="${active}=='3'?'active':''"><a th:href="@{/allScreensPage}"><i class="fa fa-bars"></i><span>影厅列表</span></a></li>
             <li th:class="${active}=='4'?'active':''"><a th:href="@{/addScreensPage}"><i class="fa fa-plus"></i> <span>添加影厅</span> </a></li>
-            <li><a th:href="@{/exit}"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
-
+            <hr>
+            <li th:class="${active}=='5'?'active':''"><a th:href="@{/allRowPiecePage}"><i class="fa fa-bars"></i><span>排片列表</span></a></li>
+            <li th:class="${active}=='6'?'active':''"><a th:href="@{/addRowPiecePage}"><i class="fa fa-plus"></i> <span>添加排片</span> </a></li>
+            <hr>
+            <li><a th:href="@{/exit_admin}"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
+        </ul>
+    </div>
+</div>
+<div id="member_leftmenu" class="left-side sticky-left-side">
+    <div class="left-side-inner">
+        <!--左菜单-->
+        <ul class="nav nav-pills nav-stacked custom-nav">
+            <li><a th:href="@{/}" target="_blank"><i class="fa fa-home"></i><span>电影首页</span></a></li>
+            <hr>
+            <li th:class="${active}=='1'?'active':''"><a th:href="@{/allFilmPage}"><i class="fa fa-bars"></i><span>订单列表</span></a></li>
+            <li th:class="${active}=='2'?'active':''"><a th:href="@{/addFilmPage}"><i class="fa fa-plus"></i> <span>充值金额</span> </a></li>
+            <li><a th:href="@{/exit_admin}"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
         </ul>
     </div>
 </div>
 
 <div id="com_headermenu" class="header-section">
-    <div class="col-lg-10" style="text-align: right">
-        <label style="margin: 10px">姓名：<span th:text="${session.admin.name}"></span></label>
-        <label style="margin: 10px">账号：<span th:text="${session.admin.account}"></span></label>
+    <div class="col-lg-10" style="text-align: right;margin-bottom: 15px;margin-top: 15px">
+        <span class="label label-info" style="margin: 10px">姓名：<span th:text="${session.admin.name}"></span></span>
+        <span class="label label-success" style="margin: 10px">账号：<span th:text="${session.admin.account}"></span></span>
     </div>
 </div>
 
+<div id="member_header" class="col-lg-10">
+    <div th:if="${session.member}!=null" style="text-align: left">
+        <blockquote class="col-lg-1"style="text-align: center;margin-bottom: 0px">
+            <img th:src="@{'/fileload/download/'+${session.member.avatar}}" style="height: 50px; padding:3px;border-radius: 5px;border: #98fdf4 solid 1.5px">
+        </blockquote>
+        <blockquote class="col-lg-11"style="margin-bottom: 0px">
+            <p class="label label-info" >昵称：<span th:text="${session.member.nickname}"></span></p><br>
+            <p class="label label-success">账号：<span th:text="${session.member.account}"></span></p>
+            <a th:href="@{/exit_member}">注销登录</a>
+        </blockquote>
+    </div>
+</div>
 <div id="com_alert" th:if="${msg}!=null" th:switch="${msg.code}">
     <div th:case="200" class="alert alert-success fade in" >
         <button type="button" class="close close-sm" data-dismiss="alert">
             <i class="fa fa-times"></i>
         </button>
-        <label style="color: green" th:text="${msg.message}"></label>
+        <label style="color: green" th:utext="${msg.message}"></label>
     </div>
     <div th:case="100" class="alert alert-info fade in" >
         <button type="button" class="close close-sm" data-dismiss="alert">
@@ -77,6 +98,12 @@
             <i class="fa fa-times"></i>
         </button>
         <label style="color: red" th:text="${msg.message}"></label>
+    </div>
+    <div th:case="404" class="alert alert-warning fade in" >
+        <button type="button" class="close close-sm" data-dismiss="alert">
+            <i class="fa fa-times"></i>
+        </button>
+        <label style="color: orange" th:text="${msg.message}"></label>
     </div>
 </div>
 

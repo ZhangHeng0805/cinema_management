@@ -84,8 +84,8 @@
                 <div class="form-group">
                     <label for="releaseTime" class="col-lg-1 col-sm-1 control-label">上映时间</label>
                     <div class="col-lg-11">
-                        <input th:class="${'form-control form-control-inline input-medium default-date-picker'}"  type="text" name="releaseTime" class="form-control" id="releaseTime" oninput="titleInput('releaseTime','t_releaseTime',10)" placeholder="电影的上映时间(xxxx-xx-xx)" required>
-                        <p id="t_releaseTime" class="help-block">请输入电影的上映时间[时间格式：xxxx-xx-xx]（字数限制10字）</p>
+                        <input th:class="${'form-control form-control-inline input-medium default-date-picker'}" readonly  type="text" name="releaseTime" class="form-control" id="releaseTime" oninput="titleInput('releaseTime','t_releaseTime',10)" placeholder="电影的上映时间(xxxx-xx-xx)" required>
+                        <p id="t_releaseTime" class="help-block">请选择电影的上映时间[时间格式：xxxx-xx-xx]（字数限制10字）</p>
                     </div>
                 </div>
                 <!--电影评分-->

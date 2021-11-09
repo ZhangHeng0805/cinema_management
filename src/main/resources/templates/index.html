@@ -12,17 +12,20 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
 </head>
-<body style="text-align: center">
-<h1>影片列表</h1>
+<body>
 <div class="main-content">
-    <div class="row" style="text-align: right;margin-right: 25px">
-        <a th:href="@{/login_admi}"><button class="btn btn-success">后台登录</button></a>
+    <div class="row" style="text-align: center;padding-right: 15px; margin-bottom:20px;border-bottom: #2ea8e5 solid 3px">
+        <div th:replace="common:: #member_header"></div>
+        <blockquote class="col-lg-2" style="height:70px; margin-bottom: 0px">
+            <a th:if="${session.member}==null" th:href="@{/login_memberPage}"><button class="btn btn-info">会员登录</button></a>
+            <a th:href="@{/login_admi}"><button class="btn btn-success">后台登录</button></a>
+        </blockquote>
     </div>
     <div class="row" style="font-size: medium;text-align: center;align-items:center;margin:10px;border-bottom: #1CAF9A solid 1px" th:each="fi:${films}">
-        <div class="col-lg-3" style="text-align:center;height: 400px;display: inline-block">
+        <blockquote class="col-lg-3" style="text-align:center;height: 400px;margin-bottom: 0px">
             <img th:src="${'/fileload/download/'+fi.cover}"style="width: 250px;object-fit: contain">
-        </div>
-        <blockquote class="col-lg-9" style="text-align: left;height: 400px">
+        </blockquote>
+        <blockquote class="col-lg-9" style="text-align: left;height: 400px;margin-bottom: 0px">
                 <h3>《<span th:text="${fi.filmName}"></span>》</h3>
                 <p>导演：<span th:text="${fi.director}"></span></p>
                 <p>主要演员：<span th:text="${fi.mainActor}"></span></p>
@@ -33,7 +36,7 @@
                 <p>简介：<span th:text="${fi.filmIntroduced}"></span></p>
                 <div th:switch="${fi.state}">
                     <button th:case="0" class="btn btn-info" disabled>即将上线</button>
-                    <button th:case="1" class="btn btn-success">去购票</button>
+                    <a th:href="@{chooseRowPiece+'?filmId='+${fi.id}}" th:case="1" class="btn btn-success">去购票</a>
                     <button th:case="2" class="btn btn-default" disabled>已售罄</button>
                 </div>
         </blockquote>

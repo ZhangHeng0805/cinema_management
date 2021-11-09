@@ -408,10 +408,10 @@
 		},
 		formatDate: function(date, format){
 			var val = {
-				d: date.getDate(),
-				m: date.getMonth() + 1,
+				yyyy: date.getFullYear(),
 				yy: date.getFullYear().toString().substring(2),
-				yyyy: date.getFullYear()
+				m: date.getMonth() + 1,
+				d: date.getDate()
 			};
 			val.dd = (val.d < 10 ? '0' : '') + val.d;
 			val.mm = (val.m < 10 ? '0' : '') + val.m;

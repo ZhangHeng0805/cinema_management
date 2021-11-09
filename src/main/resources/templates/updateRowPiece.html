@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>排片信息更新</title>
+    <link th:include="common::com_css">
+    <script th:src="@{/static/js/myJs/input.js}"></script>
+
+</head>
+
+<body class="sticky-header">
+<section>
+    <div th:replace="common :: #com_leftmenu"></div>
+    <div class="main-content">
+        <div th:replace="common :: #com_headermenu"></div>
+        <div class="wrapper">
+            <div th:replace="common :: #com_alert"></div>
+            <form th:if="${msg.code}!=null and ${msg.code}!=404 and ${msg.code}!=200 and ${RowPiece}!=null" class="form-horizontal" th:action="@{/updateRowPiece}" role="form" name="addScreensFrom" method="post" enctype="multipart/form-data" onsubmit="return flag()">
+                <input type="hidden"name="id" th:value="${RowPiece.id}">
+                <!--影片名称-->
+                <div class="form-group">
+                    <label for="filmName" class="col-lg-1 col-sm-1 control-label">电影名称</label>
+                    <div class="col-lg-11">
+                        <input type="hidden" name="filmId" th:value="${RowPiece.filmId}">
+                        <input type="text" class="form-control" name="filmName" readonly id="filmName" th:value="${RowPiece.filmName}">
+                        <p class="help-block">排片的影片（不可修改）</p>
+                    </div>
+                </div>
+                <!--影厅名称-->
+                <div class="form-group">
+                    <label for="screensName" class="col-lg-1 col-sm-1 control-label">影厅名称</label>
+                    <div class="col-lg-11">
+                        <input type="hidden" name="screensId" th:value="${RowPiece.screensId}">
+                        <input type="text" class="form-control" name="screensName" readonly id="screensName" th:value="${RowPiece.screensName}">
+                        <p class="help-block">放映的影厅（不可修改）</p>
+                    </div>
+                </div>
+                <!--播放时间-->
+                <div class="form-group">
+                    <label for="playingTime" class="col-lg-1 col-sm-1 control-label">放映时间</label>
+                    <div class="col-lg-11">
+                        <input th:class="${'form_datetime form-control'}" th:value="${RowPiece.playingTime}" readonly type="text" name="playingTime" class="form-control" id="playingTime" oninput="titleInput('playingTime','t_playingTime',10)" placeholder="电影的上映时间" required>
+                        <p id="t_playingTime" class="help-block">请选择播放时间</p>
+                    </div>
+                </div>
+                <!--票价-->
+                <div class="form-group">
+                    <label for="fare" class="col-lg-1 col-sm-1 control-label">票价</label>
+                    <div class="col-lg-11">
+                        <input type="number" max="1000" min="1" th:value="${RowPiece.fare}" step="0.01" name="fare" class="form-control" id="fare" oninput="titleInput('fare','t_fare',6)" placeholder="请输入放映的票价" required>
+                        <p id="t_fare" class="help-block">请输入放映的票价</p>
+                    </div>
+                </div>
+                <!--表单提交按钮-->
+                <div class="form-group">
+                    <div class="col-lg-offset-1 col-lg-3">
+                        <button type="submit" class="btn btn-success btn-lg btn-block">添加排片信息</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer class="sticky-footer">
+            2021 &copy; <a href="https://github.com/ZhangHeng0805" target="_blank">星曦向荣</a>
+        </footer>
+    </div>
+</section>
+
+<div th:include="common::#com_js"></div>
+
+</body>
+</html>

@@ -1,9 +1,11 @@
 package com.zghh.cinema_management.utils;
 
 
+import java.util.Random;
+
 public class Message {
     private String time;//时间戳
-    private int code;//状态码(200:成功 100:数据为Null 500:错误）
+    private int code;//状态码(200:成功; 100:提示; 404:警告; 500:错误）
     private String title;//标题
     private String message;//内容
 
@@ -56,5 +58,11 @@ public class Message {
                 " // " + title +
                 " // " + message +
                 '}';
+    }
+    //获取指定范围的随机数
+    public static int RandomNum(int min,int max){
+        Random random = new Random();
+        int s = random.nextInt(max)%(max-min+1) + min;
+        return s;
     }
 }

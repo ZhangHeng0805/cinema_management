@@ -25,8 +25,8 @@
                             <thead class="cf">
                             <tr>
                                 <th style="text-align: center">排片id</th>
-                                <th style="text-align: center">电影id</th>
-                                <th style="text-align: center">影厅id</th>
+                                <th style="text-align: center">电影名称</th>
+                                <th style="text-align: center">影厅名称</th>
                                 <th style="text-align: center">播放时间</th>
                                 <th style="text-align: center">票价</th>
                                 <th style="text-align: center">座位状态</th>
@@ -38,11 +38,11 @@
                                     <td data-title="排片id">
                                         <span th:text="${r.id}"></span>
                                     </td>
-                                    <td data-title="电影id" style="text-align: center">
-                                        <span th:text="${r.filmId}"></span>
+                                    <td data-title="电影名称" style="text-align: center">
+                                        <span th:text="${r.filmName}"></span>
                                     </td>
-                                    <td data-title="影厅id">
-                                        <span th:text="${r.screensId}"></span>
+                                    <td data-title="影厅名称">
+                                        <span th:text="${r.screensName}"></span>
                                     </td>
                                     <td data-title="播放时间">
                                         <span th:text="${r.playingTime}"></span>
@@ -55,18 +55,12 @@
                                     </td>
                                     <td data-title="操作" style="text-align: center">
 <!--                                        <a class="btn btn-sm btn-search p1" put_url="/ReadArticle/${a.id}/${a.title}" put_id="${a.id}">查看</a>-->
-                                        <a class="btn btn-sm btn-warning s1" th:href="@{'/updateFilmPage?id='+${r.id}}">修改</a>
-                                        <a class="btn btn-sm btn-danger d1" put_url="/deleteFilmById" th:put_id="${r.id}">删除</a>
+                                        <a class="btn btn-sm btn-warning s1" th:href="@{'/updateRowPiecePage?id='+${r.id}}">修改</a>
+                                        <a class="btn btn-sm btn-danger d1" put_url="/deleteRowPiece" th:put_id="${r.id}">删除</a>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <form id="putEmpRorm" method="post">
-                        </form>
-                        <form id="setEmpRorm" method="post">
-                            <input type="hidden" id="s_id" name="id">
-                            <input type="hidden" name="authorId" value="${user.id}">
-                        </form>
                         <form id="delEmpRorm" method="post">
                             <input type="hidden" id="d_id" name="id">
                         </form>
@@ -87,7 +81,7 @@
         EditableTable.init();
     });
     $(".d1").click(function () {
-        var d=window.confirm("确定删除此影片？");
+        var d=window.confirm("确定删除此排片？");
         if(d) {
             $("#d_id").attr("value", $(this).attr("put_id"));
             $("#delEmpRorm").attr("action", $(this).attr("put_url")).submit();

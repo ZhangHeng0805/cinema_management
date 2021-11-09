@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>选择排片</title>
+    <link th:include="common::com_css">
+</head>
+<body>
+<div class="main-content">
+    <div class="header-section">
+        <div th:if="${session.member}!=null" class="col-lg-10" style="text-align: left">
+            <div class="col-lg-1"style="text-align: center;margin-top: 2px">
+                <img th:src="@{'/fileload/download/'+${session.member.avatar}}" style="height: 50px; padding:3px;border-radius: 5px;border: #98fdf4 solid 1.5px">
+            </div>
+            <div class="col-lg-10" style="height: 50px;">
+                <div class="row" style="margin-bottom: 4px;margin-top: 2px">
+                    <p class="label label-success text-center">账号：<span th:text="${session.member.account}"></span></p>
+                    <a th:href="@{/exit_member}">注销登录</a>
+                </div>
+                <div class="row">
+                    <p class="label label-info text-center" >昵称：<span th:text="${session.member.nickname}"></span></p>
+                    <p class="label label-primary text-center" >余额：<span class="fa fa-yen"></span><span th:text="${session.member.balance}"></span></p>
+                </div>
+            </div>
+            <div class="col-lg-1" style="height: 50px ;margin-top: 5px;padding: 0px">
+                <a class="btn btn-warning text-center">去充值</a>
+            </div>
+        </div>
+    </div>
+    <div th:replace="common::#com_alert"></div>
+    <div class="col-md-4" th:if="${rowList}!=null" th:each="r:${rowList}">
+        <section class="panel">
+            <header class="panel-heading">
+                《<span th:text="${r.filmName}"></span>》
+                <span class="tools pull-right">
+                <a class="fa fa-chevron-down" href="javascript:;"></a>
+            </span>
+            </header>
+            <div class="panel-body">
+
+                    <p>影厅名称：<span class="text-success" th:text="${r.screensName}"></span></p>
+                    <p>座位情况：<span class="text-primary" th:text="${r.sitState}"></span></p>
+                    <p>放映时间：<span class="text-warning" th:text="${r.playingTime}"></span></p>
+                <p>票价：<span class="label label-info"><span class="fa fa-yen"></span><span th:text="${r.fare}"></span></span></p>
+                    <p><a th:href="@{chooseSitPage+'?rowPieceId='+${r.id}}" class="btn btn-success">去选座</a></p>
+
+            </div>
+
+        </section>
+    </div>
+
+</div>
+<div th:replace="common::#com_js"></div>
+</body>
+</html>

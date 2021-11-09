@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>会员注册</title>
+    <link th:replace="common::com_css">
+</head>
+<body class="login-body">
+
+<div class="container">
+
+    <form class="form-signin" enctype="multipart/form-data" name="regist" th:action="@{/regist_member}" method="post" onsubmit="return submit()">
+        <div class="form-signin-heading text-center">
+            <h1 class="sign-title">会员注册</h1>
+            <img src="/static/images/login-logo.png" alt=""/>
+        </div>
+        <div class="login-wrap">
+            <div th:replace="common :: #com_alert"></div>
+            <p>在下面输入您的个人详细信息</p>
+            <!--昵称-->
+            <div class="form-group">
+                <input type="text" autofocus="" placeholder="请输入昵称" class="form-control" name="nickname" required>
+            </div>
+            <!--性别-->
+            <div class="form-group">
+            <div class="radios">
+                <label for="radio-01" class="label_radio col-lg-6 col-sm-6">
+                    <input type="radio" checked="" value="1" id="radio-01" name="gender"> 男
+                </label>
+                <label for="radio-02" class="label_radio col-lg-6 col-sm-6">
+                    <input type="radio" value="2" id="radio-02" name="gender"> 女
+                </label>
+            </div>
+            </div>
+            <!--邮箱-->
+            <div class="form-group">
+                <input type="email" name="email" placeholder="请输入邮箱" class="form-control" required>
+            </div>
+            <!--生日-->
+            <div class="form-group">
+                <input type="text" name="birthday" placeholder="请选择您的生日" class="form-control form-control-inline input-medium default-date-picker" readonly required>
+            </div>
+            <!--头像-->
+            <div class="form-group">
+                <div class="fileupload fileupload-new" data-provides="fileupload">
+                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                        <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                    </div>
+                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                    <div>
+                        <span class="label label-danger ">注意!</span>
+                        <span>请选择账号头像(大小2Mb以内,正方形的图片)</span>
+                        <br>
+                        <span class="btn btn-default btn-file">
+                       <span class="fileupload-new"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                       <span class="fileupload-exists"><i class="fa fa-undo"></i> 更改</span>
+                       <input id="cover" type="file" class="default" name="image" />
+                    </span>
+                        <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <p> 在下面输入您的帐户详细信息</p>
+            <input type="text" autofocus="" placeholder="请输入手机号" class="form-control" name="phoneNum" required>
+            <input type="password" placeholder="请输入密码" class="form-control" name="password0" required>
+            <input type="password" placeholder="请再次输入密码" class="form-control" name="password" required>
+
+            <button type="submit" class="btn btn-lg btn-login btn-block">
+                <i class="fa fa-check"></i>
+            </button>
+
+            <div class="registration">
+                已经注册了，
+                <a th:href="@{/login_memberPage}">去登录</a>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+
+<div th:replace="common::#com_js"></div>
+</body>
+</html>

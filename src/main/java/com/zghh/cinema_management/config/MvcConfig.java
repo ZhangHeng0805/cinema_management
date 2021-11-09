@@ -1,7 +1,8 @@
 package com.zghh.cinema_management.config;
 
 
-import com.zghh.cinema_management.interceptor.LoginInterceptor;
+import com.zghh.cinema_management.interceptor.AdminLoginInterceptor;
+import com.zghh.cinema_management.interceptor.MemberLoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -19,9 +20,14 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/addFilmPage","/allFilmPage","/updateFilmPage","/updateFilm","/deleteFilmById");
-
+        //管理员登录拦截
+        registry.addInterceptor(new AdminLoginInterceptor())
+                .addPathPatterns("/addFilmPage","/allFilmPage","/updateFilmPage","/updateFilm","/deleteFilmById",
+                        "/allRowPiecePage","/addRowPiecePage","/addRowPiece","/updateRowPiecePage","/updateRowPiece","/deleteRowPiece",
+                        "/allScreensPage","/addScreensPage","/addScreens","/updateScreensPage","/updateScreens","/deleteScreens");
+        //会员登录拦截
+        registry.addInterceptor(new MemberLoginInterceptor())
+                .addPathPatterns("/chooseRowPiece","/chooseSitPage","/chooseSit");
     }
 
     @Override
