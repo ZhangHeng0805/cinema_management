@@ -44,6 +44,8 @@
             <li th:class="${active}=='5'?'active':''"><a th:href="@{/allRowPiecePage}"><i class="fa fa-bars"></i><span>排片列表</span></a></li>
             <li th:class="${active}=='6'?'active':''"><a th:href="@{/addRowPiecePage}"><i class="fa fa-plus"></i> <span>添加排片</span> </a></li>
             <hr>
+            <li th:class="${active}=='7'?'active':''"><a th:href="@{/allOrderPage}"><i class="fa fa-bars"></i> <span>订单列表</span> </a></li>
+            <hr>
             <li><a th:href="@{/exit_admin}"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
         </ul>
     </div>

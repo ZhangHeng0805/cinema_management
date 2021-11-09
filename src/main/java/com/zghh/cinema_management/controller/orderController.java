@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -162,5 +163,24 @@ public class orderController {
         }
         model.addAttribute("msg",msg);
         return "chooseSit";
+    }
+    //跳转至所有订单界面
+    @GetMapping("allOrderPage")
+    private String allOrderPage(Model model ){
+        Message msg = new Message();
+        List<Order> all = orderRepository.findAll();
+        for (Order o:all){
+            List<Integer> list = SeatingInfoUtil.subSitToList(o.getSitNum());
+            String s="";
+            for (int i:list){
+                s+=(i+1)+"号 ";
+            }
+            o.setSitNum(s);
+        }
+        msg.setCode(100);
+        msg.setMessage("一共有"+all.size()+"个订单");
+        model.addAttribute("orderList",all);
+        model.addAttribute("msg",msg);
+        return "allOrder";
     }
 }

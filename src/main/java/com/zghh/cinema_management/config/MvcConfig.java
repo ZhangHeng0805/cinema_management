@@ -24,7 +24,8 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new AdminLoginInterceptor())
                 .addPathPatterns("/addFilmPage","/allFilmPage","/updateFilmPage","/updateFilm","/deleteFilmById",
                         "/allRowPiecePage","/addRowPiecePage","/addRowPiece","/updateRowPiecePage","/updateRowPiece","/deleteRowPiece",
-                        "/allScreensPage","/addScreensPage","/addScreens","/updateScreensPage","/updateScreens","/deleteScreens");
+                        "/allScreensPage","/addScreensPage","/addScreens","/updateScreensPage","/updateScreens","/deleteScreens",
+                        "/allOrderPage");
         //会员登录拦截
         registry.addInterceptor(new MemberLoginInterceptor())
                 .addPathPatterns("/chooseRowPiece","/chooseSitPage","/chooseSit");
