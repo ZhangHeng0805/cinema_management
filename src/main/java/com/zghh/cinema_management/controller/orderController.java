@@ -124,8 +124,11 @@ public class orderController {
                                     if (s != null) {
                                         //将新的座位情况设置到排片中
                                         byId.get().setSitState(s);
-                                        //修改排片中的座位情况
+                                        //修改保存排片中的座位情况
                                         rowPieceRepository.saveAndFlush(byId.get());
+                                        //设置订单详情
+                                        String info=byId.get().getPlayingTime()+" —《"+byId.get().getFilmName()+"》— ["+byId.get().getScreensName()+"]";
+                                        order.setOrderInfo(info);
                                         //保存订单
                                         Order save = orderRepository.save(order);
                                         msg.setCode(200);
@@ -199,12 +202,6 @@ public class orderController {
                 s+=(i+1)+"号 ";
             }
             o.setSitNum(s);
-            Optional<RowPiece> byId = rowPieceRepository.findById(o.getRowpieceId());
-            String info="";
-            if (byId.isPresent()){
-                info="影片：《"+byId.get().getFilmName()+"》影厅：["+byId.get().getScreensName()+"]";
-            }
-            o.setOrderInfo(info);
         }
         msg.setCode(100);
         msg.setMessage("亲爱的："+member.getNickname()+",你一共有"+ordersByAccountId.size()+"个订单。");
@@ -227,7 +224,7 @@ public class orderController {
                     Members saveAndFlush = membersRepository.saveAndFlush(member);
                     byId.get().setOrderState(1);
                     orderRepository.save(byId.get());
-                    request.setAttribute("member",saveAndFlush);
+                    request.getSession().setAttribute("member",saveAndFlush);
                     msg.setCode(200);
                     msg.setMessage("订单:"+byId.get().getOrderNum()+"，支付成功！");
                 }else {
@@ -271,7 +268,7 @@ public class orderController {
                             order.setOrderState(2);
                             Order order1 = orderRepository.saveAndFlush(order);
                             msg.setCode(200);
-                            msg.setMessage("订单已取消，交易失败");
+                            msg.setMessage("订单已取消，交易取消");
                         } else {
                             msg.setCode(500);
                             msg.setMessage("座位情况修改失败");
@@ -311,7 +308,7 @@ public class orderController {
                         msg.setMessage("订单删除成功！");
                     }else {
                         msg.setCode(500);
-                        msg.setMessage("删除失败，只能删除交易失败的订单");
+                        msg.setMessage("删除失败，只能删除交易取消的订单");
                     }
                 }else {
                     msg.setCode(500);

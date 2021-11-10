@@ -262,7 +262,7 @@ public class MemberController {
                         balance+=100;
                         byId1.get().setBalance(balance);
                         Members saveAndFlush = membersRepository.saveAndFlush(byId1.get());
-                        request.setAttribute("member",saveAndFlush);
+                        request.getSession().setAttribute("member",saveAndFlush);
 //                        ClearSession.clear(request,"member");
                         msg.setCode(200);
                         msg.setMessage("成功充值100元");

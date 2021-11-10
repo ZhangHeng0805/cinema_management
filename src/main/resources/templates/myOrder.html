@@ -52,7 +52,7 @@
                                     <td data-title="订单状态" th:switch="${o.orderState}">
                                         <span class="label label-warning" th:case="0">未支付</span>
                                         <span class="label label-success" th:case="1">交易成功</span>
-                                        <span class="label label-danger" th:case="2">交易失败</span>
+                                        <span class="label label-danger" th:case="2">交易取消</span>
                                     </td>
                                     <td data-title="操作" th:switch="${o.orderState}">
                                         <div th:case="0">
@@ -102,7 +102,7 @@
         }
     });
     $(".c1").click(function () {
-        var d=window.confirm("确定取消此订单？取消订单则交易失败");
+        var d=window.confirm("确定取消此订单？取消订单则交易取消");
         if(d) {
             $("#d_id").attr("value", $(this).attr("put_id"));
             $("#delEmpRorm").attr("action", $(this).attr("put_url")).submit();

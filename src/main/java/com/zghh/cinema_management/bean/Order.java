@@ -16,7 +16,7 @@ public class Order {
     private Integer accountId;//用户id
     @Column
     private Integer rowpieceId;//排片id
-
+    @Column
     private String orderInfo;//订单详情
     @Column
     private String sitNum;//座位号(多个之间逗号隔开)

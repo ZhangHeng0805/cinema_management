@@ -56,7 +56,7 @@
                                     <td data-title="订单状态" th:switch="${o.orderState}">
                                         <span class="label label-warning" th:case="0">未支付</span>
                                         <span class="label label-success" th:case="1">已支付</span>
-                                        <span class="label label-danger" th:case="2">交易失败</span>
+                                        <span class="label label-danger" th:case="2">交易取消</span>
                                     </td>
                                 </tr>
                             </tbody>
