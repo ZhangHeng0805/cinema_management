@@ -92,14 +92,16 @@ function total_price() {
     if (li.length>0){
         document.getElementById("sit_num").innerText=' × '+li.length;
         total=f*li.length;
+        total=total.toFixed(2);
        document.getElementById("sub").value="提交订单（"+total+"元）";
        document.getElementById("orderPrice").value=total;
     } else {
         document.getElementById("sit_num").innerText='';
         total=f*li.length;
+        total=total.toFixed(2);
         document.getElementById("sub").value="提交订单（"+total+"元）";
         document.getElementById("orderPrice").value=null;
     }
-    console.log(total)
+    // console.log(total)
 }
 writeHtml();

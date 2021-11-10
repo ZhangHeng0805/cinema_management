@@ -25,10 +25,11 @@ public class MvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/addFilmPage","/allFilmPage","/updateFilmPage","/updateFilm","/deleteFilmById",
                         "/allRowPiecePage","/addRowPiecePage","/addRowPiece","/updateRowPiecePage","/updateRowPiece","/deleteRowPiece",
                         "/allScreensPage","/addScreensPage","/addScreens","/updateScreensPage","/updateScreens","/deleteScreens",
-                        "/allOrderPage");
+                        "/allOrderPage","/allMemberPage","/updateMemberState");
         //会员登录拦截
         registry.addInterceptor(new MemberLoginInterceptor())
-                .addPathPatterns("/chooseRowPiece","/chooseSitPage","/chooseSit");
+                .addPathPatterns("/chooseRowPiece","/chooseSitPage","/chooseSit","/myOrderPage","/RechargePage",
+                        "/Recharge","/PayOrder","/cancelOrder","/deleteOrder");
     }
 
     @Override

@@ -197,7 +197,10 @@ public class TestController {
     }
     @Test
     public void test1(){
-
+        double b=37.8*3;
+        System.out.println(b);
+        double v = Message.twoDecimalPlaces(b);
+        System.out.println(v);
     }
 
 }

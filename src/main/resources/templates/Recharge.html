@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>会员充值</title>
+    <link th:include="common::com_css">
+</head>
+<body>
+<div th:replace="common::#member_leftmenu"></div>
+<div class="main-content">
+    <div th:replace="common::#member_headermenu"></div>
+    <div th:replace="common::#com_alert"></div>
+    <div class="panel">
+        <header class="panel-heading">
+            充值金额
+        </header>
+        <div class="panel-body">
+            <!--验证码-->
+            <div th:if="${codeId}!=null " class="row"style="text-align: center">
+                <div class="col-lg-12">
+                    <img th:src="@{/static/images/QRcode.jpg}" style="height: 200px">
+                </div>
+                <div class="col-lg-12"style="padding-top: 15px">
+                    <div class="row">
+                        <label>扫码关注微信公众号,回复：<span class="text-danger" th:text="${codeId}"></span>；获取验证码，即可免费充值100元</label>
+                    </div>
+                    <div class="row" style="padding-top: 10px;">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4" style="text-align: center">
+                            <form th:action="@{/Recharge}" method="post">
+                                <input type="hidden" name="id" th:value="${codeId}">
+                                <div class="form-group">
+                                    <input type="text" placeholder="输入验证码" class="form-control" name="code" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-primary" value="充值">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="common::#com_js"></div>
+</body>
+</html>

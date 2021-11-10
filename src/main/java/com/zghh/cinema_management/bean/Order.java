@@ -16,6 +16,8 @@ public class Order {
     private Integer accountId;//用户id
     @Column
     private Integer rowpieceId;//排片id
+
+    private String orderInfo;//订单详情
     @Column
     private String sitNum;//座位号(多个之间逗号隔开)
     @Column
@@ -55,6 +57,14 @@ public class Order {
 
     public void setRowpieceId(Integer rowpieceId) {
         this.rowpieceId = rowpieceId;
+    }
+
+    public String getOrderInfo() {
+        return orderInfo;
+    }
+
+    public void setOrderInfo(String orderInfo) {
+        this.orderInfo = orderInfo;
     }
 
     public String getSitNum() {

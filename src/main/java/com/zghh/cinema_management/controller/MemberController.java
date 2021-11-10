@@ -2,14 +2,8 @@ package com.zghh.cinema_management.controller;
 
 
 import com.sun.org.apache.xpath.internal.operations.Mod;
-import com.zghh.cinema_management.bean.Members;
-import com.zghh.cinema_management.bean.Order;
-import com.zghh.cinema_management.bean.RowPiece;
-import com.zghh.cinema_management.bean.Screens;
-import com.zghh.cinema_management.repository.MembersRepository;
-import com.zghh.cinema_management.repository.OrderRepository;
-import com.zghh.cinema_management.repository.RowPieceRepository;
-import com.zghh.cinema_management.repository.ScreensRepository;
+import com.zghh.cinema_management.bean.*;
+import com.zghh.cinema_management.repository.*;
 import com.zghh.cinema_management.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -38,6 +32,8 @@ public class MemberController {
     private ScreensRepository screensRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private CodeRepository codeRepository;
     //跳转至会员登录界面
     @RequestMapping("login_memberPage")
     private String login_memberPage(Model model){
@@ -194,6 +190,100 @@ public class MemberController {
     private String exit(HttpServletRequest request){
         ClearSession.clear(request,"member");
         return "redirect:/";
+    }
+    //跳转至全部会员列表界面
+    @GetMapping("allMemberPage")
+    private String allMember(Model model){
+        Message msg = new Message();
+        List<Members> all = membersRepository.findAll();
+        msg.setCode(100);
+        msg.setMessage("一共有"+all.size()+"个会员用户");
+        model.addAttribute("msg",msg);
+        model.addAttribute("memberList",all);
+        return "allMember";
+    }
+    //修改账号状态
+    @PostMapping("updateMemberState")
+    private String updateMemberState(@Nullable Integer id, Model model){
+        Message msg = new Message();
+        if (id!=null) {
+            Optional<Members> byId = membersRepository.findById(id);
+            if (byId.isPresent()){
+                if (byId.get().getState().equals(0)){
+                    byId.get().setState(1);
+                }else if (byId.get().getState().equals(1)){
+                    byId.get().setState(0);
+                }
+                Members saveAndFlush = membersRepository.saveAndFlush(byId.get());
+                String sta=null;
+                if (saveAndFlush.getState().equals(0)){
+                    sta="封禁";
+                }else if (saveAndFlush.getState().equals(1)){
+                    sta="解封";
+                }
+                msg.setCode(200);
+                msg.setMessage("用户:"+saveAndFlush.getNickname()+"，账号状态已被"+sta);
+            }else {
+                msg.setCode(500);
+                msg.setMessage("修改用户不存在");
+            }
+        }else {
+            msg.setCode(500);
+            msg.setMessage("修改id为null");
+        }
+        model.addAttribute("msg",msg);
+        return "allMember";
+    }
+    //跳转至充值金额界面
+    @GetMapping("RechargePage")
+    private String RechargePage(Model model,HttpSession session){
+        Message msg = new Message();
+        Members member = (Members) session.getAttribute("member");
+        msg.setCode(100);
+        msg.setMessage(member.getNickname()+",你的余额为:"+member.getBalance());
+        List<VerificationCode> all = codeRepository.findAll();
+        int i = Message.RandomNum(0, all.size());
+        model.addAttribute("codeId",all.get(i).getId());
+        model.addAttribute("msg",msg);
+        model.addAttribute("active",2);
+        return "Recharge";
+    }
+    @PostMapping("Recharge")
+    private String Recharge(@Nullable VerificationCode verificationCode,Model model,HttpServletRequest request){
+        Message msg = new Message();
+        if (verificationCode.getId()!=null&&verificationCode.getCode()!=null){
+            Optional<VerificationCode> byId = codeRepository.findById(verificationCode.getId());
+            if (byId.isPresent()){
+                if (byId.get().getCode().equals(verificationCode.getCode())){
+                    Members member = (Members) request.getSession().getAttribute("member");
+                    Optional<Members> byId1 = membersRepository.findById(member.getId());
+                    if (byId1.isPresent()){
+                        Double balance = byId1.get().getBalance();
+                        balance+=100;
+                        byId1.get().setBalance(balance);
+                        Members saveAndFlush = membersRepository.saveAndFlush(byId1.get());
+                        request.setAttribute("member",saveAndFlush);
+//                        ClearSession.clear(request,"member");
+                        msg.setCode(200);
+                        msg.setMessage("成功充值100元");
+                    }else {
+                        msg.setCode(500);
+                        msg.setMessage("用户信息错误");
+                    }
+                }else {
+                    msg.setCode(500);
+                    msg.setMessage("验证码错误");
+                }
+            }else {
+                msg.setCode(500);
+                msg.setMessage("验证信息错误");
+            }
+        }else {
+            msg.setCode(500);
+            msg.setMessage("提交信息为null");
+        }
+        model.addAttribute("msg",msg);
+        return "Recharge";
     }
 
 

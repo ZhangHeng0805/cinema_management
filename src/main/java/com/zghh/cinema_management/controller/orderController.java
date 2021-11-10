@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
@@ -101,6 +102,7 @@ public class orderController {
                     //判断排片信息是否正确
                     if (byId.isPresent()) {
                         double v = list.size() * byId.get().getFare();
+                        v = Message.twoDecimalPlaces(v);//保留两位小数
                         //判断总价格是否正确
                         if (order.getOrderPrice().equals(v)){
                             Optional<Members> byId1 = membersRepository.findById(order.getAccountId());
@@ -128,6 +130,7 @@ public class orderController {
                                         Order save = orderRepository.save(order);
                                         msg.setCode(200);
                                         msg.setMessage("订单号：" + save.getOrderNum() + " ；总金额："+save.getOrderPrice()+"元；订单状态：未完成,待支付。");
+                                        model.addAttribute("order",save);
                                     } else {
                                         msg.setCode(500);
                                         msg.setMessage("错误，座位信息情况修改失败");
@@ -182,5 +185,147 @@ public class orderController {
         model.addAttribute("orderList",all);
         model.addAttribute("msg",msg);
         return "allOrder";
+    }
+    //跳转至我的订单界面
+    @GetMapping("myOrderPage")
+    private String myOrderPage(Model model,HttpSession session){
+        Message msg = new Message();
+        Members member = (Members) session.getAttribute("member");
+        List<Order> ordersByAccountId = orderRepository.findOrdersByAccountId(member.getId());
+        for (Order o:ordersByAccountId){
+            List<Integer> list = SeatingInfoUtil.subSitToList(o.getSitNum());
+            String s="";
+            for (int i:list){
+                s+=(i+1)+"号 ";
+            }
+            o.setSitNum(s);
+            Optional<RowPiece> byId = rowPieceRepository.findById(o.getRowpieceId());
+            String info="";
+            if (byId.isPresent()){
+                info="影片：《"+byId.get().getFilmName()+"》影厅：["+byId.get().getScreensName()+"]";
+            }
+            o.setOrderInfo(info);
+        }
+        msg.setCode(100);
+        msg.setMessage("亲爱的："+member.getNickname()+",你一共有"+ordersByAccountId.size()+"个订单。");
+        model.addAttribute("orderList",ordersByAccountId);
+        model.addAttribute("active",1);
+        model.addAttribute("msg",msg);
+        return "myOrder";
+    }
+    //支付订单
+    @PostMapping("PayOrder")
+    private String PayOrder(@Nullable Integer id, Model model, HttpServletRequest request){
+        Message msg = new Message();
+        if (id!=null){
+            Optional<Order> byId = orderRepository.findById(id);
+            if (byId.isPresent()){
+                Members member = (Members) request.getSession().getAttribute("member");
+                //判断账户余额是否充足
+                if (member.getBalance()>=byId.get().getOrderPrice()){
+                    member.setBalance(member.getBalance()-byId.get().getOrderPrice());
+                    Members saveAndFlush = membersRepository.saveAndFlush(member);
+                    byId.get().setOrderState(1);
+                    orderRepository.save(byId.get());
+                    request.setAttribute("member",saveAndFlush);
+                    msg.setCode(200);
+                    msg.setMessage("订单:"+byId.get().getOrderNum()+"，支付成功！");
+                }else {
+                    msg.setCode(404);
+                    msg.setMessage("对不起，你的余额不足，请去充值后再来支付订单");
+                }
+            }else {
+                msg.setCode(500);
+                msg.setMessage("没有找到支付信息");
+            }
+        }else {
+            msg.setCode(500);
+            msg.setMessage("支付订单id错误");
+        }
+        model.addAttribute("msg",msg);
+        return "myOrder";
+    }
+    //取消订单
+    @PostMapping("cancelOrder")
+    private String cancelOrder(@Nullable Integer id,Model model,HttpServletRequest request){
+        Message msg = new Message();
+        if (id!=null){
+            Optional<Order> byId = orderRepository.findById(id);
+            if (byId.isPresent()){
+                Members member = (Members) request.getSession().getAttribute("member");
+                Order order = byId.get();
+                if (member.getId().equals(order.getAccountId())) {
+                    //将所选座位号转换为集合
+                    List<Integer> list = SeatingInfoUtil.subSitToList(order.getSitNum());
+                    //查找此订单的排片
+                    Optional<RowPiece> byId1 = rowPieceRepository.findById(order.getRowpieceId());
+                    if (byId1.isPresent()) {
+                        //将订单所选座位修改为有座
+                        String s = SeatingInfoUtil.updateSit(byId1.get().getSitState(), list, 't');
+                        if (s != null) {
+                            //设置新的座位情况
+                            byId1.get().setSitState(s);
+                            //保存修改的排片信息
+                            rowPieceRepository.saveAndFlush(byId1.get());
+                            //设置订单状态失败
+                            order.setOrderState(2);
+                            Order order1 = orderRepository.saveAndFlush(order);
+                            msg.setCode(200);
+                            msg.setMessage("订单已取消，交易失败");
+                        } else {
+                            msg.setCode(500);
+                            msg.setMessage("座位情况修改失败");
+                        }
+                    } else {
+                        msg.setCode(500);
+                        msg.setMessage("没有找到排片信息");
+                    }
+                }else {
+                    msg.setCode(500);
+                    msg.setMessage("订单用户错误，取消订单失败");
+                }
+            }else {
+                msg.setCode(500);
+                msg.setMessage("没有找到订单信息");
+            }
+        }else {
+            msg.setCode(500);
+            msg.setMessage("订单id为null");
+        }
+        model.addAttribute("msg",msg);
+        return "myOrder";
+    }
+    //删除订单
+    @PostMapping("deleteOrder")
+    private String deleteOrder(@Nullable Integer id,Model model,HttpServletRequest request){
+        Message msg = new Message();
+        if (id!=null){
+            Optional<Order> byId = orderRepository.findById(id);
+            if (byId.isPresent()){
+                Members member = (Members) request.getSession().getAttribute("member");
+                //判断订单用户是否本人
+                if (byId.get().getAccountId().equals(member.getId())) {
+                    if (byId.get().getOrderState().equals(2)) {
+                        orderRepository.deleteById(id);
+                        msg.setCode(200);
+                        msg.setMessage("订单删除成功！");
+                    }else {
+                        msg.setCode(500);
+                        msg.setMessage("删除失败，只能删除交易失败的订单");
+                    }
+                }else {
+                    msg.setCode(500);
+                    msg.setMessage("订单用户错误，删除订单失败");
+                }
+            }else {
+                msg.setCode(500);
+                msg.setMessage("订单不存在,没有找到订单信息");
+            }
+        }else {
+            msg.setCode(500);
+            msg.setMessage("订单id为null");
+        }
+        model.addAttribute("msg",msg);
+        return "myOrder";
     }
 }

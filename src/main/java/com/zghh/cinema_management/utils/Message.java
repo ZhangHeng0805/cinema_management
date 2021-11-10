@@ -1,6 +1,7 @@
 package com.zghh.cinema_management.utils;
 
 
+import java.text.DecimalFormat;
 import java.util.Random;
 
 public class Message {
@@ -64,5 +65,12 @@ public class Message {
         Random random = new Random();
         int s = random.nextInt(max)%(max-min+1) + min;
         return s;
+    }
+    //保留两位小数
+    public static double twoDecimalPlaces(double num){
+        DecimalFormat df   = new DecimalFormat("######0.00");
+        String format = df.format(num);
+        Double aDouble = Double.valueOf(format);
+        return aDouble;
     }
 }

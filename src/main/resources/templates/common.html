@@ -29,6 +29,7 @@
     </div>
 </head>
 <body>
+<!--管理员左侧菜单-->
 <div id="com_leftmenu" class="left-side sticky-left-side">
     <div class="left-side-inner">
         <!--左菜单-->
@@ -46,23 +47,42 @@
             <hr>
             <li th:class="${active}=='7'?'active':''"><a th:href="@{/allOrderPage}"><i class="fa fa-bars"></i> <span>订单列表</span> </a></li>
             <hr>
-            <li><a th:href="@{/exit_admin}"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
-        </ul>
-    </div>
-</div>
-<div id="member_leftmenu" class="left-side sticky-left-side">
-    <div class="left-side-inner">
-        <!--左菜单-->
-        <ul class="nav nav-pills nav-stacked custom-nav">
-            <li><a th:href="@{/}" target="_blank"><i class="fa fa-home"></i><span>电影首页</span></a></li>
+            <li th:class="${active}=='8'?'active':''"><a th:href="@{/allMemberPage}"><i class="fa fa-bars"></i> <span>会员列表</span> </a></li>
             <hr>
-            <li th:class="${active}=='1'?'active':''"><a th:href="@{/allFilmPage}"><i class="fa fa-bars"></i><span>订单列表</span></a></li>
-            <li th:class="${active}=='2'?'active':''"><a th:href="@{/addFilmPage}"><i class="fa fa-plus"></i> <span>充值金额</span> </a></li>
             <li><a th:href="@{/exit_admin}"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
         </ul>
     </div>
 </div>
 
+<!--会员左侧菜单-->
+<div id="member_leftmenu" class="left-side sticky-left-side">
+    <div class="left-side-inner">
+        <div class="row" style="text-align: center">
+            <div class="col-lg-12" style="margin-top: 15px">
+                <img th:src="@{'/fileload/download/'+${session.member.avatar}}" style="height: 100px; padding:3px;border-radius: 5px;border: #98fdf4 solid 1.5px">
+            </div>
+            <div class="col-lg-12" style="margin-top: 15px">
+                <label class="text-primary" th:text="${session.member.nickname}"></label>
+            </div>
+            <div class="col-lg-12" style="margin-top: 15px">
+                <span class="lable label-info" style="padding: 5px;border-radius: 5px">
+                    余额：<span class="fa fa-yen"></span><span th:text="${session.member.balance}"></span>
+                </span>
+            </div>
+        </div>
+        <!--左菜单-->
+        <ul class="nav nav-pills nav-stacked custom-nav">
+            <li><a th:href="@{/}"><i class="fa fa-home"></i><span>电影首页</span></a></li>
+            <hr>
+            <li th:class="${active}=='1'?'active':''"><a th:href="@{/myOrderPage}"><i class="fa fa-bars"></i><span>订单列表</span></a></li>
+            <li th:class="${active}=='2'?'active':''"><a th:href="@{/RechargePage}"><i class="fa fa-plus"></i> <span>充值金额</span> </a></li>
+            <hr>
+            <li><a th:href="@{/exit_member}"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
+        </ul>
+    </div>
+</div>
+
+<!--管理员顶部导航栏-->
 <div id="com_headermenu" class="header-section">
     <div class="col-lg-10" style="text-align: right;margin-bottom: 15px;margin-top: 15px">
         <span class="label label-info" style="margin: 10px">姓名：<span th:text="${session.admin.name}"></span></span>
@@ -70,6 +90,29 @@
     </div>
 </div>
 
+<!--会员顶部导航栏-->
+<div id="member_headermenu" class="header-section">
+    <div th:if="${session.member}!=null" class="col-lg-10" style="text-align: left">
+        <div class="col-lg-1"style="text-align: center;margin-top: 2px">
+            <img th:src="@{'/fileload/download/'+${session.member.avatar}}" style="height: 50px; padding:3px;border-radius: 5px;border: #98fdf4 solid 1.5px">
+        </div>
+        <div class="col-lg-8" style="height: 50px;">
+            <div class="row" style="margin-bottom: 2px;margin-top: 2px">
+                <p class="label label-success text-center">账号：<span th:text="${session.member.account}"></span></p>
+                <a th:href="@{/exit_member}">注销登录</a>
+            </div>
+            <div class="row">
+                <p class="label label-info text-center" >昵称：<span th:text="${session.member.nickname}"></span></p>
+                <p class="label label-primary text-center" >余额：<span class="fa fa-yen"></span><span th:text="${session.member.balance}"></span></p>
+            </div>
+        </div>
+        <div class="col-lg-3" style="height: 50px ;margin-top: 5px">
+            <a class="btn btn-search text-center" th:href="@{/myOrderPage}">我的订单</a>
+            <a class="btn btn-warning text-center" th:href="@{/RechargePage}">去充值</a>
+        </div>
+    </div>
+</div>
+<!--首页顶部导航栏-->
 <div id="member_header" class="col-lg-10">
     <div th:if="${session.member}!=null" style="text-align: left">
         <blockquote class="col-lg-1"style="text-align: center;margin-bottom: 0px">

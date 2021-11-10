@@ -6,27 +6,9 @@
     <link th:include="common::com_css">
 </head>
 <body>
+<div th:replace="common::#member_leftmenu"></div>
 <div class="main-content">
-    <div class="header-section">
-        <div th:if="${session.member}!=null" class="col-lg-10" style="text-align: left">
-            <div class="col-lg-1"style="text-align: center;margin-top: 2px">
-                <img th:src="@{'/fileload/download/'+${session.member.avatar}}" style="height: 50px; padding:3px;border-radius: 5px;border: #98fdf4 solid 1.5px">
-            </div>
-            <div class="col-lg-10" style="height: 50px;">
-                <div class="row" style="margin-bottom: 2px;margin-top: 2px">
-                    <p class="label label-success text-center">账号：<span th:text="${session.member.account}"></span></p>
-                    <a th:href="@{/exit_member}">注销登录</a>
-                </div>
-                <div class="row">
-                    <p class="label label-info text-center" >昵称：<span th:text="${session.member.nickname}"></span></p>
-                    <p class="label label-primary text-center" >余额：<span class="fa fa-yen"></span><span th:text="${session.member.balance}"></span></p>
-                </div>
-            </div>
-            <div class="col-lg-1" style="height: 50px ;margin-top: 5px">
-                <a class="btn btn-warning text-center">去充值</a>
-            </div>
-        </div>
-    </div>
+    <div th:replace="common::#member_headermenu"></div>
     <div th:replace="common::#com_alert"></div>
     <div th:if="${rowPiece}!=null">
         <input type="hidden" id="s1" th:value="${rowPiece.sitState}" >
@@ -73,16 +55,38 @@
             </form>
         </section>
     </div>
-    <div th:if="${rowPiece}==null and ${msg.code}==200">
+    <div th:if="${rowPiece}==null and ${msg.code}==200 and ${order}!=null">
         <div class="row" style="text-align: center">
-            <a class="btn btn-success">去支付</a>
-            <a class="btn btn-warning">取消订单</a>
+            <a class="btn btn-success p1" put_url="/PayOrder" th:put_id="${order.id}" >去支付</a>
+            <a class="btn btn-warning d1" put_url="/cancelOrder" th:put_id="${order.id}">取消订单</a>
         </div>
     </div>
 </div>
-
-
+<form id="delEmpRorm" method="post">
+    <input type="hidden" id="d_id" name="id">
+</form>
 <div th:replace="common::#com_js"></div>
+<script>
+    jQuery(document).ready(function() {
+        EditableTable.init();
+    });
+    $(".p1").click(function () {
+        var d=window.confirm("确定支付该订单？");
+        if(d) {
+            $("#d_id").attr("value", $(this).attr("put_id"));
+            $("#delEmpRorm").attr("action", $(this).attr("put_url")).submit();
+            return false;
+        }
+    });
+    $(".d1").click(function () {
+        var d=window.confirm("确定取消该订单？取消则交易失败。");
+        if(d) {
+            $("#d_id").attr("value", $(this).attr("put_id"));
+            $("#delEmpRorm").attr("action", $(this).attr("put_url")).submit();
+            return false;
+        }
+    });
+</script>
 <script src="/static/js/myJs/seating_info_utils.js"></script>
 </body>
 </html>
