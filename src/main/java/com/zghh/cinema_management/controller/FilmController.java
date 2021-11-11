@@ -4,8 +4,11 @@ import com.zghh.cinema_management.bean.Film;
 import com.zghh.cinema_management.bean.RowPiece;
 import com.zghh.cinema_management.repository.FilmRepository;
 import com.zghh.cinema_management.repository.RowPieceRepository;
+import com.zghh.cinema_management.utils.CusAccessObjectUtil;
 import com.zghh.cinema_management.utils.Message;
 import com.zghh.cinema_management.utils.TimeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
@@ -27,9 +30,13 @@ public class FilmController {
     private FilmRepository filmRepository;
     @Autowired
     private RowPieceRepository rowPieceRepository;
+    private Logger log = LoggerFactory.getLogger(getClass());
     /*跳转至影片列表页面*/
     @RequestMapping("/")
-    private String toFilmListPage(Model model){
+    private String toFilmListPage(Model model,HttpServletRequest request){
+        String ipAddress = CusAccessObjectUtil.getIpAddress(request);
+        String user_agent = CusAccessObjectUtil.getUser_Agent(request);
+        log.info("ip:"+ipAddress+";agent:"+user_agent);
         List<Film> all = filmRepository.findAll();
         model.addAttribute("films",all);
         return "index";

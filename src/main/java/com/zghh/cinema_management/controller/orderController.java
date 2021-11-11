@@ -11,6 +11,7 @@ import com.zghh.cinema_management.repository.ScreensRepository;
 import com.zghh.cinema_management.utils.Message;
 import com.zghh.cinema_management.utils.SeatingInfoUtil;
 import com.zghh.cinema_management.utils.TimeUtil;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,7 @@ public class orderController {
     private MembersRepository membersRepository;
     @Autowired
     private ScreensRepository screensRepository;
+
     //跳转至选择排片的页面
     @GetMapping("chooseRowPiece")
     private String chooseRowPiece(@Nullable Integer filmId, Model model){

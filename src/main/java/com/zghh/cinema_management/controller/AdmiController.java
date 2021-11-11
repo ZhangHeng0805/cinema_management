@@ -8,6 +8,8 @@ import com.zghh.cinema_management.utils.ClearSession;
 import com.zghh.cinema_management.utils.Message;
 import com.zghh.cinema_management.utils.PhoneNumUtil;
 import com.zghh.cinema_management.utils.TimeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,7 @@ public class AdmiController {
     private AdministratorRepository administratorRepository;
     @Autowired
     private CodeRepository codeRepository;
+    private Logger log = LoggerFactory.getLogger(getClass());
 
     //管理员登录页面
     @RequestMapping("login_admi")
@@ -39,14 +42,16 @@ public class AdmiController {
                 //判断改手机号的用户是否存在
                 if (!administratorByPhoneNum.isEmpty()){
                     //判断使用手机号登录的密码是否正确
-                    if (administratorByPhoneNum.get(0).getPassword().equals(administrator.getPassword())){
+                    Administrator administrator1 = administratorByPhoneNum.get(0);
+                    if (administrator1.getPassword().equals(administrator.getPassword())){
                         //判断账号状态（0：禁用 1：正常）
-                        if (administratorByPhoneNum.get(0).getState().equals(1)) {
+                        if (administrator1.getState().equals(1)) {
+                            log.info("管理员登录:"+administrator1.getPhoneNum()+",用户名:"+administrator1.getName());
                             msg.setTime(TimeUtil.time(new Date()));
                             msg.setCode(200);
                             msg.setTitle("登录成功");
                             msg.setMessage("登录成功！");
-                            session.setAttribute("admin", administratorByPhoneNum.get(0));
+                            session.setAttribute("admin", administrator1);
                             model.addAttribute("msg", msg);
                             return "redirect:allFilmPage";
                         }else {
@@ -152,6 +157,7 @@ public class AdmiController {
                             administrator.setState(1);
                             Administrator save = administratorRepository.save(administrator);
                             msg.setTime(TimeUtil.time(new Date()));
+                            log.info("管理员注册:"+save.getPhoneNum()+",用户名:"+save.getName());
                             msg.setCode(200);
                             msg.setTitle("注册成功");
                             msg.setMessage("注册成功！你的账号为：" + save.getAccount() + "。<a href=\"/login_admi\">去登录</a>");
@@ -182,8 +188,10 @@ public class AdmiController {
             msg.setMessage("管理员，请注册！");
         }
         List<VerificationCode> all = codeRepository.findAll();
-        int s = Message.RandomNum(0, all.size() - 1);
-        model.addAttribute("codeId",all.get(s).getId());
+        if (!all.isEmpty()) {
+            int s = Message.RandomNum(0, all.size() - 1);
+            model.addAttribute("codeId",all.get(s).getId());
+        }
         model.addAttribute("msg",msg);
         return "regist_admi";
     }

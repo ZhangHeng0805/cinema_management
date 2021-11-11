@@ -18,9 +18,9 @@ public class TimeUtil {
         SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
         return sdf.format(data1);
     }
-    //计算两个时间之间的时间差（分钟差）
+    //计算两个时间之间的时间差（分钟差）[yyyy-MM-dd HH:mm:ss]
     public static int minutesDifference(String time1,String time2){
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date fromDate = null;
         Date toDate =null;
         int minutes=-1;
@@ -38,7 +38,27 @@ public class TimeUtil {
         }
         return minutes;
     }
-    //计算两个时间之间的时间差（小时差）
+    //计算两个时间之间的时间差（分钟差）[yyyy-MM-dd HH:mm]
+    public static int minutesDif(String time1,String time2){
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date fromDate = null;
+        Date toDate =null;
+        int minutes=-1;
+        try {
+            fromDate = simpleFormat.parse(time1);
+            toDate= simpleFormat.parse(time2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (fromDate!=null&&toDate!=null) {
+            long from = fromDate.getTime();
+            long to = toDate.getTime();
+            minutes = (int) ((to - from)*1.0 / (1000*60));
+            minutes=Math.abs(minutes);
+        }
+        return minutes;
+    }
+    //计算两个时间之间的时间差（小时差）[yyyy-MM-dd HH:mm]
     public static int hoursDifference(String time1,String time2){
         SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date fromDate = null;
@@ -58,7 +78,7 @@ public class TimeUtil {
         }
         return hours;
     }
-    //计算两个时间之间的时间差（天数差）
+    //计算两个时间之间的时间差（天数差）[yyyy-MM-dd HH:mm]
     public static int daysDifference(String time1,String time2){
         SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date fromDate = null;

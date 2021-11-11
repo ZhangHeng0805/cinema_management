@@ -10,13 +10,13 @@
 <div class="main-content">
     <div th:replace="common::#member_headermenu"></div>
     <div th:replace="common::#com_alert"></div>
-    <div class="panel">
+    <div class="panel" th:if="${codeId}!=null">
         <header class="panel-heading">
             充值金额
         </header>
         <div class="panel-body">
             <!--验证码-->
-            <div th:if="${codeId}!=null " class="row"style="text-align: center">
+            <div class="row"style="text-align: center">
                 <div class="col-lg-12">
                     <img th:src="@{/static/images/QRcode.jpg}" style="height: 200px">
                 </div>

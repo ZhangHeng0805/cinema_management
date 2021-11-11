@@ -5,6 +5,8 @@ import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.zghh.cinema_management.bean.*;
 import com.zghh.cinema_management.repository.*;
 import com.zghh.cinema_management.utils.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
@@ -27,13 +29,10 @@ public class MemberController {
     @Autowired
     private MembersRepository membersRepository;
     @Autowired
-    private RowPieceRepository rowPieceRepository;
-    @Autowired
-    private ScreensRepository screensRepository;
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
     private CodeRepository codeRepository;
+    @Autowired
+    private LoggerRepository loggerRepository;
+    private Logger log = LoggerFactory.getLogger(getClass());
     //跳转至会员登录界面
     @RequestMapping("login_memberPage")
     private String login_memberPage(Model model){
@@ -72,6 +71,7 @@ public class MemberController {
                             members.setState(1);//设置账号状态
                             members.setBalance(0.00);//设置余额
                             Members save = membersRepository.save(members);
+                            log.info("会员注册:"+save.getPhoneNum()+",用户名:"+save.getNickname());
                             msg.setCode(200);
                             msg.setMessage("恭喜：" + save.getNickname() + "注册成功！你的账号为：" + save.getAccount() + "。<a href='/login_memberPage'>去登录</a>");
                         } else {
@@ -110,11 +110,14 @@ public class MemberController {
                 //判断此用户是否存在
                 if (!membersByPhoneNum.isEmpty()){
                     //检查密码
-                    if (membersByPhoneNum.get(0).getPassword().equals(members.getPassword())){
+                    Members members1 = membersByPhoneNum.get(0);
+                    if (members1.getPassword().equals(members.getPassword())){
                         //检查账号状态
-                        if (membersByPhoneNum.get(0).getState().equals(1)){
+                        if (members1.getState().equals(1)){
+
                             //登陆成功
-                            session.setAttribute("member",membersByPhoneNum.get(0));
+                            session.setAttribute("member",members1);
+                            log.info("会员登录:"+members1.getPhoneNum()+",用户名:"+members1.getNickname());
                             msg.setCode(200);
                             msg.setMessage("登录成功");
                             model.addAttribute("msg",msg);
@@ -248,6 +251,7 @@ public class MemberController {
         model.addAttribute("active",2);
         return "Recharge";
     }
+    //充值表单提交
     @PostMapping("Recharge")
     private String Recharge(@Nullable VerificationCode verificationCode,Model model,HttpServletRequest request){
         Message msg = new Message();
@@ -257,15 +261,46 @@ public class MemberController {
                 if (byId.get().getCode().equals(verificationCode.getCode())){
                     Members member = (Members) request.getSession().getAttribute("member");
                     Optional<Members> byId1 = membersRepository.findById(member.getId());
+                    //判断用户是否存在
                     if (byId1.isPresent()){
-                        Double balance = byId1.get().getBalance();
-                        balance+=100;
-                        byId1.get().setBalance(balance);
-                        Members saveAndFlush = membersRepository.saveAndFlush(byId1.get());
-                        request.getSession().setAttribute("member",saveAndFlush);
-//                        ClearSession.clear(request,"member");
-                        msg.setCode(200);
-                        msg.setMessage("成功充值100元");
+                        //根据账号和充值操作查询操作日志
+                        Optional<com.zghh.cinema_management.bean.Logger> byAccountAndType = loggerRepository.findByAccountAndType(byId1.get().getAccount(), 0);
+                        if (byAccountAndType.isPresent()){
+                            int time = TimeUtil.minutesDifference(TimeUtil.time(new Date()), byAccountAndType.get().getTime());
+                            //判断充值操作间隔是否大于12小时
+                            if (time>=720){//大于12小时
+                                byAccountAndType.get().setTime(TimeUtil.time(new Date()));
+                                com.zghh.cinema_management.bean.Logger logger = loggerRepository.saveAndFlush(byAccountAndType.get());
+                                log.info(logger.toString());
+                                Double balance = byId1.get().getBalance();
+                                balance += 100;
+                                byId1.get().setBalance(balance);
+                                Members saveAndFlush = membersRepository.saveAndFlush(byId1.get());
+                                request.getSession().setAttribute("member", saveAndFlush);
+                                msg.setCode(200);
+                                msg.setMessage("成功充值100元");
+                            }else {//小于12小时
+                                msg.setCode(500);
+                                msg.setMessage("充值时间需要间隔12小时，请"+(720-time)+"分钟后再来操作");
+                            }
+                        }else {//没有操作日志
+                            //操作日志
+                            com.zghh.cinema_management.bean.Logger logger = new com.zghh.cinema_management.bean.Logger();
+                            logger.setAccount(member.getAccount());//设置操作者账号
+                            logger.setName(member.getNickname());//设置操作者名称
+                            logger.setTel(member.getPhoneNum());//设置操作者手机号
+                            logger.setType(0);//设置操作类型
+                            logger.setTime(TimeUtil.time(new Date()));//设置操作时间
+                            com.zghh.cinema_management.bean.Logger save = loggerRepository.save(logger);//保存操作日志
+                            log.info(save.toString());
+                            Double balance = byId1.get().getBalance();
+                            balance += 100;
+                            byId1.get().setBalance(balance);
+                            Members saveAndFlush = membersRepository.saveAndFlush(byId1.get());
+                            request.getSession().setAttribute("member", saveAndFlush);
+                            msg.setCode(200);
+                            msg.setMessage("成功充值100元");
+                        }
                     }else {
                         msg.setCode(500);
                         msg.setMessage("用户信息错误");

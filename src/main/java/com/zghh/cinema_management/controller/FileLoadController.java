@@ -39,6 +39,7 @@ public class FileLoadController {
                 filename = filename.replace(" ", "");
                 //判断文件是否为图片
                 if (FiletypeUtil.getFileType(filename).equals("image")) {
+                    //保存文件名
                     String name = type+"/星曦向荣影视网"
                             + UUID.randomUUID().toString().substring(0, 5)
                             + "_" + imgName+filename.substring(filename.lastIndexOf("."));
@@ -99,9 +100,10 @@ public class FileLoadController {
 //            log.info("下载请求成功:"+file.getPath());
         } catch (Exception e) {
             if (e.toString().indexOf("does not exist")>1){
-                response.sendError(404,"没有找到文件");
+//                response.sendError(404,"没有找到文件");
+                log.error("没有找到文件");
             }else {
-                response.sendError(500,e.getMessage());
+//                response.sendError(500,e.getMessage());
             }
             log.error("错误："+e.getMessage());
         }finally {

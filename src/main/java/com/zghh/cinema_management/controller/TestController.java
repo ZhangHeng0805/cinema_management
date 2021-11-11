@@ -188,12 +188,14 @@ public class TestController {
     }
     @Test
     public void test(){
-        String t1="2018-03-01 12:00";
-        String t2="2018-03-12 12:00";
-        int i1 = TimeUtil.daysDifference(t1, t2);
-        int i2 = TimeUtil.hoursDifference(t1, t2);
-        int i3 = TimeUtil.minutesDifference(t1, t2);
-        System.out.println("天数差:"+i1+";小时差:"+i2+";分钟差:"+i3);
+        String t1="2018-03-12 11:00:68";
+        String t2="2018-03-12 12:00:60";
+//        int i1 = TimeUtil.daysDifference(t1, t2);
+//        int i2 = TimeUtil.hoursDifference(t1, t2);
+//        int i3 = TimeUtil.minutesDifference(t1, t2);
+//        System.out.println("天数差:"+i1+";小时差:"+i2+";分钟差:"+i3);
+        int i = TimeUtil.minutesDifference(t1, t2);
+        System.out.println(i);
     }
     @Test
     public void test1(){
@@ -201,6 +203,13 @@ public class TestController {
         System.out.println(b);
         double v = Message.twoDecimalPlaces(b);
         System.out.println(v);
+    }
+    @Test
+    public void test2(){
+        int i = Message.RandomNum(0, 9999);
+        int i1 = Message.RandomNum(0, 999999);
+        System.out.println(i);
+        System.out.println(i1);
     }
 
 }

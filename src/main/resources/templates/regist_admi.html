@@ -25,7 +25,7 @@
             <input type="password" placeholder="请输入密码" id="password0" class="form-control" name="password0" required>
             <input type="password" placeholder="请再次输入密码" id="password" class="form-control" name="password" required>
             <!--验证码-->
-            <div class="row"style="text-align: center">
+            <div class="row"style="text-align: center" th:if="${codeId}!=null">
                 <div class="col-lg-6">
                     <img th:src="@{/static/images/QRcode.jpg}" style="height: 150px">
                 </div>
