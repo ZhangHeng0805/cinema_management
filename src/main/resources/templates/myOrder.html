@@ -59,6 +59,10 @@
                                             <a class="btn btn-success p1" put_url="/PayOrder" th:put_id="${o.id}" >去支付</a>
                                             <a class="btn btn-warning c1" put_url="/cancelOrder" th:put_id="${o.id}">取消订单</a>
                                         </div>
+                                        <div th:case="1">
+                                            <!--播放路径使用的是我的另一个服务器-->
+                                            <a class="btn btn-info" href="http://192.168.6.168:38/ " target="_blank" >去观看</a>
+                                        </div>
                                         <div th:case="2">
                                             <a class="btn btn-danger d1" put_url="/deleteOrder" th:put_id="${o.id}" >删除订单</a>
                                         </div>
@@ -72,7 +76,6 @@
                     </section>
                 </div>
             </div>
-
         </div>
         <footer class="sticky-footer">
             2021 &copy; <a href="https://github.com/ZhangHeng0805" target="_blank">星曦向荣</a>
