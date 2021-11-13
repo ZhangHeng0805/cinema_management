@@ -16,10 +16,24 @@ Target Server Type    : MYSQL
 Target Server Version : 50535
 File Encoding         : 65001
 
-Date: 2021-11-05 23:05:20
+Date: 2021-11-13 22:54:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for logger
+-- ----------------------------
+DROP TABLE IF EXISTS `logger`;
+CREATE TABLE `logger` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '操作id',
+  `account` varchar(255) DEFAULT NULL COMMENT '操作者账号',
+  `name` varchar(255) DEFAULT NULL COMMENT '操作者名称',
+  `tel` varchar(255) DEFAULT NULL COMMENT '操作者的手机号码',
+  `time` varchar(255) DEFAULT NULL COMMENT '操作时间',
+  `type` int(11) DEFAULT NULL COMMENT '操作类型(0:充值操作)',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for t_administrator
@@ -33,7 +47,7 @@ CREATE TABLE `t_administrator` (
   `name` varchar(255) DEFAULT NULL COMMENT '姓名',
   `state` int(1) DEFAULT '0' COMMENT '账号状态(0-禁用 1-正常)',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for t_film
@@ -53,7 +67,7 @@ CREATE TABLE `t_film` (
   `film_introduced` varchar(1000) DEFAULT NULL COMMENT '电影简介',
   PRIMARY KEY (`id`),
   KEY `film_name` (`film_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for t_members
@@ -72,7 +86,7 @@ CREATE TABLE `t_members` (
   `balance` double(10,2) DEFAULT NULL COMMENT '余额',
   `state` int(1) DEFAULT '0' COMMENT '状态（0-禁用 1-启用）',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for t_order
@@ -83,16 +97,17 @@ CREATE TABLE `t_order` (
   `order_num` varchar(255) DEFAULT NULL COMMENT '订单编号',
   `account_id` int(11) DEFAULT NULL COMMENT '用户id',
   `rowpiece_id` int(11) DEFAULT NULL COMMENT '排片id',
-  `sit_num` int(10) DEFAULT NULL COMMENT '座位号',
+  `sit_num` varchar(100) DEFAULT NULL COMMENT '座位号',
   `order_state` int(1) DEFAULT '1' COMMENT '订单状态（0-未完成 1-已完成 2-订单失败）',
   `order_time` varchar(20) DEFAULT NULL COMMENT '订单时间',
   `order_price` double(255,2) DEFAULT NULL COMMENT '订单价格',
+  `order_info` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `t_order_ibfk_1` (`account_id`),
   KEY `t_order_ibfk_2` (`rowpiece_id`),
-  CONSTRAINT `t_order_ibfk_2` FOREIGN KEY (`rowpiece_id`) REFERENCES `t_row_piece` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `t_order_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `t_members` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+  CONSTRAINT `t_order_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `t_members` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `t_order_ibfk_2` FOREIGN KEY (`rowpiece_id`) REFERENCES `t_row_piece` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for t_row_piece
@@ -104,7 +119,7 @@ CREATE TABLE `t_row_piece` (
   `film_name` varchar(255) DEFAULT NULL,
   `screens_id` int(11) DEFAULT NULL COMMENT '影厅id',
   `screens_name` varchar(255) DEFAULT NULL,
-  `playing_time` varchar(20) DEFAULT NULL COMMENT '播放时间',
+  `playing_time` varchar(30) DEFAULT NULL COMMENT '播放时间',
   `fare` double(11,2) DEFAULT NULL COMMENT '票价',
   `sit_state` text COMMENT '座位状态',
   PRIMARY KEY (`id`),
@@ -112,11 +127,11 @@ CREATE TABLE `t_row_piece` (
   KEY `t_rowpiece_ibfk_2` (`screens_id`),
   KEY `film_name` (`film_name`),
   KEY `screens_name` (`screens_name`),
-  CONSTRAINT `t_row_piece_ibfk_4` FOREIGN KEY (`screens_name`) REFERENCES `t_screens` (`screens_name`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `t_row_piece_ibfk_1` FOREIGN KEY (`film_id`) REFERENCES `t_film` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `t_row_piece_ibfk_2` FOREIGN KEY (`screens_id`) REFERENCES `t_screens` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `t_row_piece_ibfk_3` FOREIGN KEY (`film_name`) REFERENCES `t_film` (`film_name`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+  CONSTRAINT `t_row_piece_ibfk_3` FOREIGN KEY (`film_name`) REFERENCES `t_film` (`film_name`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `t_row_piece_ibfk_4` FOREIGN KEY (`screens_name`) REFERENCES `t_screens` (`screens_name`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for t_screens
@@ -131,15 +146,15 @@ CREATE TABLE `t_screens` (
   `state` int(1) DEFAULT '0' COMMENT '影厅状态（0-未启用 1-启用）',
   PRIMARY KEY (`id`),
   KEY `screens_name` (`screens_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for verification_code
 -- ----------------------------
 DROP TABLE IF EXISTS `verification_code`;
 CREATE TABLE `verification_code` (
-  `id` varchar(255) NOT NULL,
-  `code` varchar(255) DEFAULT NULL,
+  `id` varchar(255) NOT NULL COMMENT '验证id',
+  `code` varchar(255) DEFAULT NULL COMMENT '验证码',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
