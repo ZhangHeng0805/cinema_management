@@ -203,6 +203,7 @@ public class MemberController {
         msg.setMessage("一共有"+all.size()+"个会员用户");
         model.addAttribute("msg",msg);
         model.addAttribute("memberList",all);
+        model.addAttribute("active",8);
         return "allMember";
     }
     //修改账号状态

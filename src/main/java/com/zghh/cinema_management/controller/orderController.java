@@ -189,6 +189,7 @@ public class orderController {
         msg.setMessage("一共有"+all.size()+"个订单");
         model.addAttribute("orderList",all);
         model.addAttribute("msg",msg);
+        model.addAttribute("active",7);
         return "allOrder";
     }
     //跳转至我的订单界面
