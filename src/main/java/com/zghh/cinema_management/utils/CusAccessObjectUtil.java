@@ -11,6 +11,20 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class CusAccessObjectUtil {
 
+    private static final String[] HEADERS_TO_TRY = {
+            "X-Forwarded-For",
+            "Proxy-Client-IP",
+            "WL-Proxy-Client-IP",
+            "HTTP_X_FORWARDED_FOR",
+            "HTTP_X_FORWARDED",
+            "HTTP_X_CLUSTER_CLIENT_IP",
+            "HTTP_CLIENT_IP",
+            "HTTP_FORWARDED_FOR",
+            "HTTP_FORWARDED",
+            "HTTP_VIA",
+            "REMOTE_ADDR",
+            "X-Real-IP"};
+
     /**
      * 获取用户真实IP地址，不使用request.getRemoteAddr();的原因是有可能用户使用了代理软件方式避免真实IP地址,
      *
@@ -27,22 +41,17 @@ public class CusAccessObjectUtil {
      */
     public static String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
+        for (String header : HEADERS_TO_TRY) {
+            ip = request.getHeader(header);
+            if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
+                return ip;
+            }
         }
+        //如果没有代理，则获取真实ip
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
+                ip = request.getRemoteAddr();
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
+        return ip.equals("0:0:0:0:0:0:0:1")?"127.0.0.1":ip;
     }
 public static void printAdress(HttpServletRequest request){
     String uri = request.getRequestURI();//返回请求行中的资源名称
@@ -61,5 +70,9 @@ public static void printAdress(HttpServletRequest request){
 public static String getUser_Agent(HttpServletRequest request){
     String ua = request.getHeader("User-Agent");
     return ua;
+}
+public static String getRequst(HttpServletRequest request){
+        String s=getIpAddress(request)+" / "+getUser_Agent(request);
+        return s;
 }
 }

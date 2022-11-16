@@ -34,9 +34,8 @@ public class FilmController {
     /*跳转至影片列表页面*/
     @RequestMapping("/")
     private String toFilmListPage(Model model,HttpServletRequest request){
-        String ipAddress = CusAccessObjectUtil.getIpAddress(request);
-        String user_agent = CusAccessObjectUtil.getUser_Agent(request);
-        log.info("ip:"+ipAddress+";agent:"+user_agent);
+        String requst1 = CusAccessObjectUtil.getRequst(request);
+        log.info(requst1);
         List<Film> all = filmRepository.findAll();
         model.addAttribute("films",all);
         return "index";
